@@ -1,6 +1,6 @@
 using System;
-using System.Net;
 using System.Collections;
+using System.Net;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -13,13 +13,15 @@ public class MasterLevel : MonoBehaviour
     public int Sidd;
     private int Life;
     private int MaxLife = 200000;
-    private int timeKill;
-    private int timeKillPlus = 60;
+    private int time;
+    private int TimeKill;
+    private int TimeKillPlus = 60;
     private bool plei;
     public UiSpisac US;
 
-    void Awake() 
+    void Awake()
     {
+        time = TimeInternet();
         if (SceneManager.GetActiveScene().buildIndex != 0)
         {
             Life--;
@@ -30,31 +32,29 @@ public class MasterLevel : MonoBehaviour
         if (!PlayerPrefs.HasKey("Moneu"))
             PlayerPrefs.SetInt("Moneu", 0);
         Life = PlayerPrefs.GetInt("Life");
+        TimeKill = PlayerPrefs.GetInt("TimeKill");
     }
+
 
     private void Start()
     {
-        Pars();
         if (US == null)
             US = GetComponent<UiSpisac>();
+        StartCoroutine(timePlus());
     }
 
     private void FixedUpdate()
     {
-        if(Life < MaxLife)
+        if (Life < MaxLife && TimeKill + TimeKillPlus == time)
         {
-
+            TimeKill = TimeKill + TimeKillPlus;
+            Life++;
         }
     }
 
     public int Getlife()
     {
         return Life;
-    }
-
-    public int SetTimeKillSeve()
-    {
-        return 0;
     }
 
     public void paus()
@@ -74,19 +74,22 @@ public class MasterLevel : MonoBehaviour
 
     public void Kill()
     {
-        Debug.Log("Kill");
-        //Debug.Log(DateTime.Now.ToString());
-        //timeKill = DateTime.Now.ToString();
-
         PlayerPrefs.SetInt("Life", Life);
-        if(US != null)
-            PlayerPrefs.SetInt("Life", US.GetMoneu());
+        PlayerPrefs.SetInt("TimeKill", time);
+        if (US != null)
+            PlayerPrefs.SetInt("Moneu", US.GetMoneu());
+
 
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
+    public IEnumerator timePlus()
+    {
+        yield return new WaitForSeconds(1);
+    }
+
     private WebClient client = new WebClient();
-    public int Pars()
+    public int TimeInternet()
     {
         string Sait = client.DownloadString("https://time100.ru/UTC");
         int secStroski = 0;
@@ -96,7 +99,7 @@ public class MasterLevel : MonoBehaviour
         int mauStroski = 10141;
         int gotStroski = 0;
 
-        int sec = 0; 
+        int sec = 0;
         int min = 0;
         int has = 0;
         int dey = 0;
@@ -119,7 +122,7 @@ public class MasterLevel : MonoBehaviour
         dey = Convert.ToInt32(defolt);
 
         defolt = "";
-        string[] mauI = { 
+        string[] mauI = {
             "€нварь", "февраль", "март", "апрел€", "май", "июнь",
             "июль", "август", "сент€брь", "окт€брь", "но€брь", "декабрь" };
         for (int i = mauStroski; i < mauStroski + 8; i++)
@@ -129,8 +132,8 @@ public class MasterLevel : MonoBehaviour
             if (defolt[i] != ' ') defolt2 += defolt[i];
             else break;
         for (int i = 0; i < 12; i++)
-            if (mauI[i] == defolt2) 
-                {mau = i+1; break;}
+            if (mauI[i] == defolt2)
+            { mau = i + 1; break; }
 
         return min * 60 + has * 3600 + dey * 86400 + mau * 2592000;
     }

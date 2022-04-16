@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine.UI;
 using UnityEngine;
-using UnityEngine.Events;
+using UnityEngine.UI;
 
 public class UiSpisac : MonoBehaviour
 {

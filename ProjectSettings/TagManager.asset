@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Kill
   - Moneu
+  - respavn
   layers:
   - Default
   - TransparentFX
@@ -40,6 +41,15 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Background
+    uniqueID: 2538216929
+    locked: 0
+  - name: platforma
+    uniqueID: 3479791903
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: kill
+    uniqueID: 2599350321
     locked: 0

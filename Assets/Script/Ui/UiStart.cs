@@ -12,9 +12,10 @@ public class UiStart : MonoBehaviour
         Setsick.text = Serse.ToString();
     }
 
+    // проверка
     public void StartButton()
     {
-        if(Serse>0 || Serse == -1)
+        if (Serse > 0 || Serse == -1)
             SceneManager.LoadScene(1);
     }
 

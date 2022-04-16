@@ -1,29 +1,44 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class PleirControlir : MonoBehaviour
 {
+    [Header("Moving")]
     public float Speed;
-    public float jamp;
+    public float Jamp;
+
+    [Header("Event")]
+    public UnityEvent HitKill;
+    public UnityEvent HitMoneuPlus;
+
     private bool isGraund;
     private Rigidbody2D rb;
 
-    public UnityEvent HitKill;
-    public UnityEvent HitMoneuPlus;
 
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        // проверка колисий с умертвяисям обекте
         if (collision.gameObject.tag == "Kill")
             HitKill.Invoke();
+        // проверка на столкновения с монетой
         else if (collision.gameObject.tag == "Moneu")
         {
             Destroy(collision.gameObject);
             HitMoneuPlus.Invoke();
         }
-        else
+        //всо осталное земля
+        else isGraund = true;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        // проверка на столкновения с монетой
+        if (collision.gameObject.tag == "Moneu")
         {
-            isGraund = true;
+            Destroy(collision.gameObject);
+            HitMoneuPlus.Invoke();
         }
     }
 
@@ -33,20 +48,30 @@ public class PleirControlir : MonoBehaviour
         isGraund = true;
     }
 
-    void FixedUpdate() 
+
+    void FixedUpdate()
     {
         transform.Translate(Vector2.right * Speed * Time.deltaTime);
-        if(transform.position.y <-10)
+
+        if (transform.position.y < -10)
             HitKill.Invoke();
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space)&& isGraund)
+        if (Input.GetKeyDown(KeyCode.Space) && isGraund)
         {
-            rb.AddForce(new Vector2(0, jamp), ForceMode2D.Impulse);
+            rb.AddForce(new Vector2(0, Jamp), ForceMode2D.Impulse);
+            StartCoroutine(antiJamp());
             //transform.Translate(Vector2.up * jamp);
-            isGraund = false;
+            //isGraund = false;
         }
     }
+
+    public IEnumerator antiJamp()
+    {
+        yield return new WaitForSeconds(0.7f);
+        rb.AddForce(new Vector2(0, -Jamp/3), ForceMode2D.Impulse);
+    }
+
 }
