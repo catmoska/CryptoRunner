@@ -4,7 +4,7 @@ public class CameraControlir : MonoBehaviour
 {
     public Transform Pleir;
     public Vector3 smesenia;
-    public float camVis = 8.95f;
+    public float[] camVis;
 
 
     //если не указан плеир то ишет на сене
@@ -21,10 +21,14 @@ public class CameraControlir : MonoBehaviour
     //двигает камеру
     private void FixedUpdate()
     {
-        Vector3 t = Pleir.position + smesenia;
-        if (t.y < camVis*2) t.y = camVis;
-        else if (t.y > camVis*2 && t.y <30) t.y /=2f;
-
-        transform.position = t;
+        Vector3 t = Pleir.position;
+        for (int i = 0; i < camVis.Length; i++) {
+            if (t.y < camVis[i] * 2)
+            {
+                t.y = camVis[i]; 
+                break;
+            }
+        }
+        transform.position = t + smesenia;
     }
 }

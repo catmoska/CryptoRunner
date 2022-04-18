@@ -7,11 +7,14 @@ TagManager:
   - Kill
   - Moneu
   - respavn
+  - MoneuDell
+  - MoneuUi
+  - Leana
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - cam
   - Water
   - UI
   - 
@@ -52,4 +55,10 @@ TagManager:
     locked: 0
   - name: kill
     uniqueID: 2599350321
+    locked: 0
+  - name: pleir
+    uniqueID: 2106771099
+    locked: 0
+  - name: UI
+    uniqueID: 1972693921
     locked: 0

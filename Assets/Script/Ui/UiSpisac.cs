@@ -20,7 +20,7 @@ public class UiSpisac : MonoBehaviour
 
     public void MoneuPlus()
     {
-        Debug.Log("MoneuPlus");
+        //Debug.Log("MoneuPlus");
         Moneu++;
         moneuText.text = Moneu.ToString();
     }

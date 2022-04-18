@@ -3,14 +3,24 @@ using System.Collections;
 using System.Net;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Audio;
+using UnityEngine.UI;
 
 public class MasterLevel : MonoBehaviour
 {
     [Header("paus")]
     public GameObject SetingsObject;
-    private bool isPaus;
+    public GameObject PausObject;
+    public GameObject EndObject;
+    public GameObject PunktObject;
+    public Animator menu;
+    public static bool isPaus = false;//MasterLevel.isPaus
+    [Header("AudioMixer")]
+    public Animator mus;
+    public AudioMixer am;
+    public AudioMixerSnapshot[] AMSnap =new AudioMixerSnapshot[2];
+    public static bool isMusic = true;//MasterLevel.isPaus
     [Header("Sidd")]
-    public int Sidd;
     private int Life;
     private int MaxLife = 200000;
     private int time;
@@ -18,10 +28,13 @@ public class MasterLevel : MonoBehaviour
     private int TimeKillPlus = 60;
     private bool plei;
     public UiSpisac US;
+    public bool besmert;
+    public Transform pleir;
+
 
     void Awake()
     {
-        time = TimeInternet();
+        //time = TimeInternet();
         if (SceneManager.GetActiveScene().buildIndex != 0)
         {
             Life--;
@@ -33,6 +46,8 @@ public class MasterLevel : MonoBehaviour
             PlayerPrefs.SetInt("Moneu", 0);
         Life = PlayerPrefs.GetInt("Life");
         TimeKill = PlayerPrefs.GetInt("TimeKill");
+
+        //Debug.Log("пипес у теб€ деног: " + PlayerPrefs.GetInt("Moneu").ToString());
     }
 
 
@@ -43,6 +58,7 @@ public class MasterLevel : MonoBehaviour
         StartCoroutine(timePlus());
     }
 
+
     private void FixedUpdate()
     {
         if (Life < MaxLife && TimeKill + TimeKillPlus == time)
@@ -52,89 +68,164 @@ public class MasterLevel : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        if (Input.GetKey(KeyCode.E))
+            reset();
+    }
+
+
     public int Getlife()
     {
         return Life;
     }
 
-    public void paus()
+
+    private bool isIen;
+    public void paus(bool Stop = false)
     {
+        if (Stop)
+            isPaus = false;
+        else if (isIen)
+            return;
+
+
+
+        PausObject.SetActive(isPaus);
+        if (isMusic)
+            AMSnap[isPaus ? 0 : 1].TransitionTo(0.5f);
+
         if (isPaus)
-        {
-            Time.timeScale = 1f;
-            SetingsObject.SetActive(false);
-        }
+            StartCoroutine(pausOff());
         else
-        {
-            Time.timeScale = 0f;
             SetingsObject.SetActive(true);
-        }
+
+        mus.SetBool("mus", isMusic);
         isPaus = !isPaus;
     }
+
+    public IEnumerator pausOff()
+    {
+        isIen = true;
+        menu.SetBool("stop", true);
+        yield return new WaitForSeconds(0.15f);
+        SetingsObject.SetActive(false);
+        isIen = false;
+    }
+
+    public void Music()
+    {
+        if (!isMusic)
+            AMSnap[isPaus ? 1 : 0].TransitionTo(0.5f);
+        else 
+            AMSnap[2].TransitionTo(0.5f);
+
+        isMusic = !isMusic;
+        mus.SetBool("mus", isMusic);
+    }
+
+
+
+
+
+    public void reset()
+    {
+        if (isPaus) paus();
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void vozrat()
+    {
+        SceneManager.LoadScene(0);
+    }
+
 
     public void Kill()
     {
         PlayerPrefs.SetInt("Life", Life);
         PlayerPrefs.SetInt("TimeKill", time);
         if (US != null)
-            PlayerPrefs.SetInt("Moneu", US.GetMoneu());
+            PlayerPrefs.SetInt("Moneu", PlayerPrefs.GetInt("Moneu") + US.GetMoneu());
 
-
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        if (besmert)
+            paus();
+        else
+            end();
     }
+
+
+    public Text mon;
+    public Text Rec;
+    private void end()
+    {
+        paus(true);
+        EndObject.SetActive(true);
+        PausObject.SetActive(false);
+        SetingsObject.SetActive(false);
+        SetingsObject.SetActive(false);
+        PunktObject.SetActive(false);
+        Rec.text = ((int)(pleir.position.x)).ToString();
+        mon.text = US.GetMoneu().ToString();
+    }
+
+
+
+
 
     public IEnumerator timePlus()
     {
         yield return new WaitForSeconds(1);
     }
 
-    private WebClient client = new WebClient();
+
+    //private WebClient client = new WebClient();
     public int TimeInternet()
     {
-        string Sait = client.DownloadString("https://time100.ru/UTC");
-        int secStroski = 0;
-        int minStroski = 10004;
-        int hasStroski = 10007;
-        int deyStroski = 10138;
-        int mauStroski = 10141;
-        int gotStroski = 0;
+        return 0;
+        //string Sait = client.DownloadString("https://time100.ru/UTC");
+        //int secStroski = 0;
+        //int minStroski = 10004;
+        //int hasStroski = 10007;
+        //int deyStroski = 10138;
+        //int mauStroski = 10141;
+        //int gotStroski = 0;
 
-        int sec = 0;
-        int min = 0;
-        int has = 0;
-        int dey = 0;
-        int mau = 0;
-        int got = 0;
+        //int sec = 0;
+        //int min = 0;
+        //int has = 0;
+        //int dey = 0;
+        //int mau = 0;
+        //int got = 0;
 
-        string defolt = "";
-        for (int i = minStroski; i < minStroski + 2; i++)
-            defolt += Sait[i];
-        min = Convert.ToInt32(defolt);
+        //string defolt = "";
+        //for (int i = minStroski; i < minStroski + 2; i++)
+        //    defolt += Sait[i];
+        //min = Convert.ToInt32(defolt);
 
-        defolt = "";
-        for (int i = hasStroski; i < hasStroski + 2; i++)
-            defolt += Sait[i];
-        has = Convert.ToInt32(defolt);
+        //defolt = "";
+        //for (int i = hasStroski; i < hasStroski + 2; i++)
+        //    defolt += Sait[i];
+        //has = Convert.ToInt32(defolt);
 
-        defolt = "";
-        for (int i = deyStroski; i < deyStroski + 2; i++)
-            defolt += Sait[i];
-        dey = Convert.ToInt32(defolt);
+        //defolt = "";
+        //for (int i = deyStroski; i < deyStroski + 2; i++)
+        //    defolt += Sait[i];
+        //dey = Convert.ToInt32(defolt);
 
-        defolt = "";
-        string[] mauI = {
-            "€нварь", "февраль", "март", "апрел€", "май", "июнь",
-            "июль", "август", "сент€брь", "окт€брь", "но€брь", "декабрь" };
-        for (int i = mauStroski; i < mauStroski + 8; i++)
-            defolt += Sait[i];
-        string defolt2 = "";
-        for (int i = 0; i < defolt.Length; i++)
-            if (defolt[i] != ' ') defolt2 += defolt[i];
-            else break;
-        for (int i = 0; i < 12; i++)
-            if (mauI[i] == defolt2)
-            { mau = i + 1; break; }
+        //defolt = "";
+        //string[] mauI = {
+        //    "€нварь", "февраль", "март", "апрел€", "май", "июнь",
+        //    "июль", "август", "сент€брь", "окт€брь", "но€брь", "декабрь" };
+        //for (int i = mauStroski; i < mauStroski + 8; i++)
+        //    defolt += Sait[i];
+        //string defolt2 = "";
+        //for (int i = 0; i < defolt.Length; i++)
+        //    if (defolt[i] != ' ') defolt2 += defolt[i];
+        //    else break;
+        //for (int i = 0; i < 12; i++)
+        //    if (mauI[i] == defolt2)
+        //    { mau = i + 1; break; }
 
-        return min * 60 + has * 3600 + dey * 86400 + mau * 2592000;
+        //return min * 60 + has * 3600 + dey * 86400 + mau * 2592000;
     }
 }
