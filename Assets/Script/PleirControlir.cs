@@ -9,18 +9,20 @@ public class PleirControlir : MonoBehaviour
     public float SpeedX;
     public float Jamp;
     public float gravitasion;
+    private Rigidbody2D rb;
 
     [Header("Event")]
     public UnityEvent HitKill;
     public UnityEvent HitMoneuPlus;
     public GeneratorLevel GL;
 
+    //is triger
     private int isGraund;
     private bool isDubleJamp;
     private bool isLiana;
-    private Rigidbody2D rb;
-    public float visataMira=50;
 
+    // разное
+    public float visataMira=50;
 
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -28,14 +30,9 @@ public class PleirControlir : MonoBehaviour
         // проверка колисий с умертвяисям обекте
         if (collision.gameObject.tag == "Kill")
         {
+            Umer();
             //Debug.Log(transform.position.x);
             HitKill.Invoke();
-        }
-        // проверка на столкновения с монетой
-        else if (collision.gameObject.tag == "Moneu")
-        {
-            Destroy(collision.gameObject);
-            HitMoneuPlus.Invoke();
         }
         //всо осталное земля
         else isGraund++;
@@ -43,9 +40,12 @@ public class PleirControlir : MonoBehaviour
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-        isGraund--;
+        if (isGraund != 0)
+        {
+            //StartCoroutine(antiJamp(3f,0.02f));
+            isGraund --;
+        }
     }
-
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -83,58 +83,123 @@ public class PleirControlir : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         isGraund ++;
+        Skin();
     }
-
 
     void FixedUpdate()
     {
+        //вечное двизения вперод
         if(!MasterLevel.isPaus)
-            transform.Translate(Vector2.right * Speed * Time.deltaTime);
+            transform.Translate(Vector2.right * Speed * Time.fixedDeltaTime);
 
-        if (transform.position.y < -10)
+        //амерть при проваливание
+        if (transform.position.y < -10 && !MasterLevel.isPaus)
             HitKill.Invoke();
     }
 
-    bool isPaus;
     void Update()
     {
+        yslov();
+        nrig();
+        pausRigidbody2d();
+    }
+
+    // толчок в низ
+    public IEnumerator antiJamp(float sila = 1,float time = -1)
+    {
+        time = (time == -1) ? 0.7f : time;
+        yield return new WaitForSeconds(time);
+        for (int i = 0; i < 20; i++)
+        {
+            rb.AddForce(new Vector2(0, (-Jamp / 3 * sila) / 20), ForceMode2D.Impulse); 
+            yield return new WaitForSeconds(0.02f);
+        }
+    }
+
+    //3 условия работи призка
+    private void yslov()
+    {
+        //удар читеров(если привишает висату мира то его припускает)
         if (transform.position.y > visataMira) rb.AddForce(new Vector2(0, -Jamp * 2), ForceMode2D.Impulse);
+        //востановления двоиного прижка или увиличает гравитасию
         if (isGraund > 0) isDubleJamp = true;
         else rb.AddForce(new Vector2(0, -gravitasion * Time.deltaTime), ForceMode2D.Impulse);
-        if (isGraund < 0) isGraund = 0;
-
-        if (isLiana)
+        //испраления бага до его появления
+        if (isGraund < 0)
         {
-            if (Input.GetKey(KeyCode.Space) && !MasterLevel.isPaus)
-            {
-                rb.AddForce(new Vector2(0, Jamp*Time.deltaTime*2), ForceMode2D.Impulse);
-            }
+            isGraund = 0;
+            Debug.LogError("призок пошол по пи**е Eroor: PleirControlir ->yslov");
         }
-        else
+    }
+
+    //релизасия призка
+    private void nrig()
+    {
+        if (isLiana && (Input.GetKey(KeyCode.Space) && !MasterLevel.isPaus))
         {
-            if (Input.GetKeyDown(KeyCode.Space) && (isGraund>0 || isDubleJamp) && !MasterLevel.isPaus)
-            {
-                if (isGraund == 0) isDubleJamp = false;
-                rb.AddForce(new Vector2(0, Jamp), ForceMode2D.Impulse);
-                StartCoroutine(antiJamp(0.5f));
-                isGraund--;
-            }
+            KarankanaLIana();
+            rb.AddForce(new Vector2(0, Jamp * Time.deltaTime * 2), ForceMode2D.Impulse);
         }
-
-
-        if(MasterLevel.isPaus!= isPaus)
+        else if (Input.GetKeyDown(KeyCode.Space) && (isGraund > 0 || isDubleJamp) && !MasterLevel.isPaus)
         {
-            if(MasterLevel.isPaus) rb.constraints = RigidbodyConstraints2D.FreezePosition;
+            if (isGraund == 0) isDubleJamp = false;
+            isGraund = 0;
+            rb.AddForce(new Vector2(0, Jamp), ForceMode2D.Impulse);
+            StartCoroutine(antiJamp(0.5f));
+            nrizok();
+        }
+        else Idot();
+    }
+
+    //пауза Rigidbody2D
+    bool isPaus;
+    private void pausRigidbody2d()
+    {
+        if (MasterLevel.isPaus != isPaus)
+        {
+            if (MasterLevel.isPaus) rb.constraints = RigidbodyConstraints2D.FreezePosition;
             else rb.constraints = RigidbodyConstraints2D.FreezePositionX;
             rb.freezeRotation = true;
+            Stoit();
         }
         isPaus = MasterLevel.isPaus;
     }
 
-    public IEnumerator antiJamp(float sila = 1)
+
+    //аниматор///////////////////////////////////////
+    private void Stoit()
     {
-        yield return new WaitForSeconds(0.7f);
-        rb.AddForce(new Vector2(0, -Jamp/3* sila), ForceMode2D.Impulse);
+
     }
 
+    private void Idot()
+    {
+
+    }
+
+    private void nrizok()
+    {
+
+    }
+
+    private void KarankanaLIana()
+    {
+
+    }
+
+    private void Umer()
+    {
+
+    }
+
+    public Animator anSkin;
+    public string[] neimSkin = new string[10];
+    public int[] NomerSkin = new int[10];
+    private void Skin()
+    {
+        if (anSkin == null)
+            return;
+        for(int i =0;i< neimSkin.Length; i++)
+            anSkin.SetInteger(neimSkin[i], NomerSkin[i]);
+    }
 }

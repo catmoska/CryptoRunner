@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+//читает количество монет и виводит
 public class UiSpisac : MonoBehaviour
 {
     public MasterLevel ML;

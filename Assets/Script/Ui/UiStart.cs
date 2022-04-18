@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+
+// при назатие кнопки старт в мену заходет в игру
 public class UiStart : MonoBehaviour
 {
     public Text Setsick;

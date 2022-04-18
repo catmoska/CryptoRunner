@@ -23,16 +23,22 @@ public class GeneratorLevel : MonoBehaviour
     public GameObject Temno;
     public Vector3 smesemiaTemno = new Vector3(19f, 0);
 
-
+    //dell
     public List<GameObject> Dell;
 
+    //nrodolzitolnast
     public int takt;
     public int taktKolibat;
     private int vidi = 4;
 
+    void Start()
+    {
+        generit();
+    }
 
-    private float moneusic;
-    private int biom;
+    //главний гениратор
+    float moneusic;
+    int biom;
     public IEnumerator generitKadar(Vector2 kord)
     {
         int i;
@@ -48,19 +54,19 @@ public class GeneratorLevel : MonoBehaviour
             int u = Randik(vidi + 1);
             switch (u)
             {
-                case 0: //платформа
+                case 0: //генирратор платформ
                     i = GENplatform(i, kord);
                     break;
-                case 1: //платформа двоина€
+                case 1: //генирратор двоиних платформ
                     i = GENplatformDuble(i, kord);
                     break;
-                case 2:  //префабс
+                case 2:  //генирратор префабов вибраних
                     i = GENprefabc(i, kord);
                     break;
-                case 3:// платформа над шипами
+                case 3://генирратор платформ вес€сих в воздухе
                     i = GENnlatformSip(i, kord);
                     break;
-                case 4:// 
+                case 4://генирратор леани и 2 €руса
                     i = GENplatformEtaz(i, kord);
                     break;
                 default:
@@ -76,18 +82,11 @@ public class GeneratorLevel : MonoBehaviour
         yield return new WaitForSeconds(Zaderzka);
     }
 
-
-    void Start()
-    {
-        generit();
-    }
-
-
+    //StartUdalenia
     private void del()
     {
         StartCoroutine(delC(Dell[Dell.Count-1]));
     }
-
 
     public IEnumerator delC(GameObject OBject)
     {
@@ -106,7 +105,7 @@ public class GeneratorLevel : MonoBehaviour
         Destroy(OBject);
     }
 
-
+    //StartGenerasia
     public void generit(Vector3 kord)
     {
         zbros();
@@ -121,6 +120,7 @@ public class GeneratorLevel : MonoBehaviour
         StartCoroutine(generitKadar(Vector3.zero));
     }
 
+    //уменшиний рандом
     private int Randik(int Max)
     {
         for (int i = 0; i < Max; i++)
@@ -129,10 +129,13 @@ public class GeneratorLevel : MonoBehaviour
         return Max-1;
     }
 
-
+    //делает случаино поворот
     private Quaternion Zerkal()
-    {return Quaternion.Euler(new Vector3(0, Random.Range(0, 2) * 180, 0));}
+    {
+        return Quaternion.Euler(new Vector3(0, Random.Range(0, 2) * 180, 0));
+    }
 
+    //збрасивает все параметри до дефолт
     private void zbros()
     {
         isDvuska_GENplatformEtaz = false;
@@ -140,11 +143,13 @@ public class GeneratorLevel : MonoBehaviour
 
 
     //////////////////////////////////////
+    //стандарт гениратор
     private int GEN(int i, Vector2 kord)
     {
         return i;
     }
 
+    //гениратор монет
     private void GENmoneu(int i, Vector2 kord, bool uron = true)
     {
         if (Random.Range(0, (int)moneusic) == 0)
@@ -160,7 +165,7 @@ public class GeneratorLevel : MonoBehaviour
             moneusic /= 2;
     }
 
-    //
+    //генирратор платформ
     private int GENplatform(int i, Vector2 kord, bool mon = true,bool uron = true)
     {
         if (mon)
@@ -170,6 +175,7 @@ public class GeneratorLevel : MonoBehaviour
         return i;
     }
 
+    //генирратор двоиних платформ
     private int GENplatformDuble(int i, Vector2 kord)
     {
         GENmoneu(i, kord);
@@ -178,6 +184,7 @@ public class GeneratorLevel : MonoBehaviour
         return i;
     }
 
+    //генирратор префабов
     private int GENprefabc(int i, Vector2 kord)
     {
         for (int g = 0; g < 2; g++)
@@ -197,6 +204,7 @@ public class GeneratorLevel : MonoBehaviour
         return i;
     }
 
+    //генирратор префабов вибраних
     private int GENprefabcClon(int i, Vector2 kord,int clonI = -1)
     {
         for (int g = 0; g < 2; g++)
@@ -217,6 +225,7 @@ public class GeneratorLevel : MonoBehaviour
         return i;
     }
 
+    //генирратор платформ вес€сих в воздухе
     private Vector2 smesenia_GENnlatformSip = new Vector2(0, 3.5f);
     private Vector2Int ranNar_GENnlatformSip = new Vector2Int(4, 15);
     private int GENnlatformSip(int i, Vector2 kord)
@@ -237,7 +246,7 @@ public class GeneratorLevel : MonoBehaviour
         return i;
     }
 
-
+    //генирратор леани и 2 €руса
     private bool isDvuska_GENplatformEtaz = false;
     private Vector2 smesenia_GENplatformEtaz = new Vector2(0, 24);
     private Vector2Int ranNar_GENplatformEtaz = new Vector2Int(10, 25);
@@ -247,17 +256,27 @@ public class GeneratorLevel : MonoBehaviour
         isDvuska_GENplatformEtaz = true;
 
         int rand = Random.Range(ranNar_GENplatformEtaz.x, ranNar_GENplatformEtaz.y);
-        for (int g = 0; g < 3; g++) i = GENplatform(i, kord, false);
+
+        for (int g = 0; g < 3; g++) 
+            i = GENplatform(i, kord, false);
+
         i = GENprefabcClon(i, kord,0);
+
         Dell.Add(Instantiate(PlatformLeft[Random.Range(0, 2) + biom * 2], new Vector2(kord.x + i * Dolg, kord.y) + smesenia_GENplatformEtaz, Quaternion.identity)); i++;
-        for (int g = 0; g < rand-2; g++) i = GENplatform(i, kord+ smesenia_GENplatformEtaz,true,false);
+        for (int g = 0; g < rand-2; g++) 
+            i = GENplatform(i, kord+ smesenia_GENplatformEtaz,true,false);
         Dell.Add(Instantiate(PlatformRight[Random.Range(0, 2) + biom * 2], new Vector2(kord.x + i * Dolg, kord.y) + smesenia_GENplatformEtaz, Quaternion.identity)); i++;
+        
         int ii = i;
         i -= rand;
-        for (int g = 0; g < rand/2; g++) i = GENplatform(i, kord);
+
+        for (int g = 0; g < rand/2; g++) 
+            i = GENplatform(i, kord);
         i = GENnlatformSip(i, kord);
-        while(ii-i >0) i = GENplatform(i, kord + smesenia_GENplatformEtaz);
-        for (int g = 0; g < 5; g++) i = GENplatform(i, kord);
+        while(ii-i >=-2) 
+            i = GENplatform(i, kord);
+        for (int g = 0; g < 5; g++) 
+            i = GENplatform(i, kord);
         return i;
     }
 }

@@ -11,25 +11,31 @@ public class MasterLevel : MonoBehaviour
     [Header("paus")]
     public GameObject SetingsObject;
     public GameObject PausObject;
-    public GameObject EndObject;
-    public GameObject PunktObject;
     public Animator menu;
     public static bool isPaus = false;//MasterLevel.isPaus
+
     [Header("AudioMixer")]
     public Animator mus;
     public AudioMixer am;
     public AudioMixerSnapshot[] AMSnap =new AudioMixerSnapshot[2];
-    public static bool isMusic = true;//MasterLevel.isPaus
-    [Header("Sidd")]
+    public static bool isMusic = true;//MasterLevel.isMusic
+
+    [Header("Life")]
+    public UiSpisac US;
+    public bool besmert;
+    public Transform pleir;
     private int Life;
     private int MaxLife = 200000;
     private int time;
     private int TimeKill;
     private int TimeKillPlus = 60;
     private bool plei;
-    public UiSpisac US;
-    public bool besmert;
-    public Transform pleir;
+
+    [Header("END")]
+    public GameObject EndObject;
+    public GameObject PunktObject;
+    public Text mon;
+    public Text Rec;
 
 
     void Awake()
@@ -63,10 +69,11 @@ public class MasterLevel : MonoBehaviour
     {
         if (Life < MaxLife && TimeKill + TimeKillPlus == time)
         {
-            TimeKill = TimeKill + TimeKillPlus;
+            TimeKill += TimeKillPlus;
             Life++;
         }
     }
+
 
     private void Update()
     {
@@ -74,22 +81,20 @@ public class MasterLevel : MonoBehaviour
             reset();
     }
 
-
+    //возрачяет количество зизней
     public int Getlife()
     {
         return Life;
     }
 
-
-    private bool isIen;
+    //пауза
+    bool isIen;
     public void paus(bool Stop = false)
     {
         if (Stop)
             isPaus = false;
         else if (isIen)
             return;
-
-
 
         PausObject.SetActive(isPaus);
         if (isMusic)
@@ -113,6 +118,7 @@ public class MasterLevel : MonoBehaviour
         isIen = false;
     }
 
+    //вкл/викл музику
     public void Music()
     {
         if (!isMusic)
@@ -124,22 +130,20 @@ public class MasterLevel : MonoBehaviour
         mus.SetBool("mus", isMusic);
     }
 
-
-
-
-
+    //ресет возрат
     public void reset()
     {
         if (isPaus) paus();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
+    //возрат в мену
     public void vozrat()
     {
         SceneManager.LoadScene(0);
     }
 
-
+    //kill
     public void Kill()
     {
         PlayerPrefs.SetInt("Life", Life);
@@ -147,18 +151,14 @@ public class MasterLevel : MonoBehaviour
         if (US != null)
             PlayerPrefs.SetInt("Moneu", PlayerPrefs.GetInt("Moneu") + US.GetMoneu());
 
-        if (besmert)
-            paus();
-        else
+        paus(true);
+        if (!besmert)
             end();
     }
 
-
-    public Text mon;
-    public Text Rec;
+    //визав мену END
     private void end()
     {
-        paus(true);
         EndObject.SetActive(true);
         PausObject.SetActive(false);
         SetingsObject.SetActive(false);
@@ -171,13 +171,12 @@ public class MasterLevel : MonoBehaviour
 
 
 
-
+    //////////////////////////////////////////////////////
+    ///хлам
     public IEnumerator timePlus()
     {
         yield return new WaitForSeconds(1);
     }
-
-
     //private WebClient client = new WebClient();
     public int TimeInternet()
     {

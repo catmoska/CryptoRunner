@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
+//двизить монетку по вертикале и ишезает
 public class MoneuDellControlir : MonoBehaviour
 {
     public void start()
