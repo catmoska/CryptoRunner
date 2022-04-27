@@ -1,10 +1,9 @@
-using System;
 using System.Collections;
-using System.Net;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Audio;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 public class MasterLevel : MonoBehaviour
 {
@@ -29,31 +28,26 @@ public class MasterLevel : MonoBehaviour
     private int time;
     private int TimeKill;
     private int TimeKillPlus = 60;
-    private bool plei;
 
     [Header("END")]
     public GameObject EndObject;
     public GameObject PunktObject;
     public Text mon;
     public Text Rec;
+    public MasterNet MN;
+    public UnityEvent HitStart;
+
+    [Header("PleirSposobnasti")]
+    public bool onlain;
+    public int skin;
+    public bool Zagruzka = true;
+
 
 
     void Awake()
     {
-        //time = TimeInternet();
-        if (SceneManager.GetActiveScene().buildIndex != 0)
-        {
-            Life--;
-            plei = true;
-        }
-        if (!PlayerPrefs.HasKey("Life"))
-            PlayerPrefs.SetInt("Life", MaxLife);
-        if (!PlayerPrefs.HasKey("Moneu"))
-            PlayerPrefs.SetInt("Moneu", 0);
-        Life = PlayerPrefs.GetInt("Life");
-        TimeKill = PlayerPrefs.GetInt("TimeKill");
-
-        //Debug.Log("пипес у теб€ деног: " + PlayerPrefs.GetInt("Moneu").ToString());
+        if(onlain)
+            MN.GetRequest();
     }
 
 
@@ -61,7 +55,7 @@ public class MasterLevel : MonoBehaviour
     {
         if (US == null)
             US = GetComponent<UiSpisac>();
-        StartCoroutine(timePlus());
+        pausNOvisual();
     }
 
 
@@ -72,6 +66,8 @@ public class MasterLevel : MonoBehaviour
             TimeKill += TimeKillPlus;
             Life++;
         }
+        if (Zagruzka && onlain)
+            conect();
     }
 
 
@@ -81,16 +77,39 @@ public class MasterLevel : MonoBehaviour
             reset();
     }
 
+    private void conect()
+    {
+        string o = MN.GetRequest();
+        if (o == "")
+            return;
+        Zagruzka = false;
+
+
+    }
+
+
     //возрач€ет количество зизней
     public int Getlife()
     {
         return Life;
     }
 
+
     //пауза
+    public void pausNOvisual()
+    {
+        paus(false);
+        SetingsObject.SetActive(false);
+    }
+
     bool isIen;
+    bool nervi = true;
     public void paus(bool Stop = false)
     {
+        if (Zagruzka && !isPaus && !Stop && onlain && !nervi)
+            return;
+        nervi = false;
+
         if (Stop)
             isPaus = false;
         else if (isIen)
@@ -134,22 +153,28 @@ public class MasterLevel : MonoBehaviour
     public void reset()
     {
         if (isPaus) paus();
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+
+        EndObject.SetActive(false);
+        PunktObject.SetActive(true);
+        US.moneuReset();
+        HitStart.Invoke();
     }
 
     //возрат в мену
     public void vozrat()
     {
+        if (isPaus) paus();
         SceneManager.LoadScene(0);
     }
 
     //kill
     public void Kill()
     {
-        PlayerPrefs.SetInt("Life", Life);
-        PlayerPrefs.SetInt("TimeKill", time);
-        if (US != null)
-            PlayerPrefs.SetInt("Moneu", PlayerPrefs.GetInt("Moneu") + US.GetMoneu());
+        //PlayerPrefs.SetInt("Life", Life);
+        //PlayerPrefs.SetInt("TimeKill", time);
+        //if (US != null)
+        //    PlayerPrefs.SetInt("Moneu", PlayerPrefs.GetInt("Moneu") + US.GetMoneu());
 
         paus(true);
         if (!besmert)
@@ -162,69 +187,11 @@ public class MasterLevel : MonoBehaviour
         EndObject.SetActive(true);
         PausObject.SetActive(false);
         SetingsObject.SetActive(false);
-        SetingsObject.SetActive(false);
         PunktObject.SetActive(false);
         Rec.text = ((int)(pleir.position.x)).ToString();
         mon.text = US.GetMoneu().ToString();
-    }
 
-
-
-
-    //////////////////////////////////////////////////////
-    ///хлам
-    public IEnumerator timePlus()
-    {
-        yield return new WaitForSeconds(1);
-    }
-    //private WebClient client = new WebClient();
-    public int TimeInternet()
-    {
-        return 0;
-        //string Sait = client.DownloadString("https://time100.ru/UTC");
-        //int secStroski = 0;
-        //int minStroski = 10004;
-        //int hasStroski = 10007;
-        //int deyStroski = 10138;
-        //int mauStroski = 10141;
-        //int gotStroski = 0;
-
-        //int sec = 0;
-        //int min = 0;
-        //int has = 0;
-        //int dey = 0;
-        //int mau = 0;
-        //int got = 0;
-
-        //string defolt = "";
-        //for (int i = minStroski; i < minStroski + 2; i++)
-        //    defolt += Sait[i];
-        //min = Convert.ToInt32(defolt);
-
-        //defolt = "";
-        //for (int i = hasStroski; i < hasStroski + 2; i++)
-        //    defolt += Sait[i];
-        //has = Convert.ToInt32(defolt);
-
-        //defolt = "";
-        //for (int i = deyStroski; i < deyStroski + 2; i++)
-        //    defolt += Sait[i];
-        //dey = Convert.ToInt32(defolt);
-
-        //defolt = "";
-        //string[] mauI = {
-        //    "€нварь", "февраль", "март", "апрел€", "май", "июнь",
-        //    "июль", "август", "сент€брь", "окт€брь", "но€брь", "декабрь" };
-        //for (int i = mauStroski; i < mauStroski + 8; i++)
-        //    defolt += Sait[i];
-        //string defolt2 = "";
-        //for (int i = 0; i < defolt.Length; i++)
-        //    if (defolt[i] != ' ') defolt2 += defolt[i];
-        //    else break;
-        //for (int i = 0; i < 12; i++)
-        //    if (mauI[i] == defolt2)
-        //    { mau = i + 1; break; }
-
-        //return min * 60 + has * 3600 + dey * 86400 + mau * 2592000;
+        if(onlain)
+            MN.PostRequest(US.GetMoneu(), (int)(pleir.position.x));
     }
 }

@@ -10,6 +10,7 @@ public class PleirControlir : MonoBehaviour
     public float Jamp;
     public float gravitasion;
     private Rigidbody2D rb;
+    public Vector2 StrtPosision;
 
     [Header("Event")]
     public UnityEvent HitKill;
@@ -79,14 +80,21 @@ public class PleirControlir : MonoBehaviour
         }
     }
 
-    void Start()
+    private void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
-        isGraund ++;
-        Skin();
+        start();
     }
 
-    void FixedUpdate()
+    public void start()
+    {
+        if(rb == null)
+            rb = GetComponent<Rigidbody2D>();
+        isGraund =1;
+        Skin();
+        transform.position = StrtPosision;
+    }
+
+    private void FixedUpdate()
     {
         //вечное двизения вперод
         if(!MasterLevel.isPaus)
@@ -97,7 +105,7 @@ public class PleirControlir : MonoBehaviour
             HitKill.Invoke();
     }
 
-    void Update()
+    private void Update()
     {
         yslov();
         nrig();
@@ -142,6 +150,7 @@ public class PleirControlir : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.Space) && (isGraund > 0 || isDubleJamp) && !MasterLevel.isPaus)
         {
+            rb.velocity *= 0f;
             if (isGraund == 0) isDubleJamp = false;
             isGraund = 0;
             rb.AddForce(new Vector2(0, Jamp), ForceMode2D.Impulse);
@@ -165,7 +174,7 @@ public class PleirControlir : MonoBehaviour
         isPaus = MasterLevel.isPaus;
     }
 
-
+    
     //аниматор///////////////////////////////////////
     private void Stoit()
     {

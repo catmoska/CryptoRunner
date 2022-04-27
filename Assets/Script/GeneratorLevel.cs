@@ -31,9 +31,14 @@ public class GeneratorLevel : MonoBehaviour
     public int taktKolibat;
     private int vidi = 4;
 
-    void Start()
+    private void Start()
     {
         generit();
+    }
+
+    public void start()
+    {
+        generitRES(Vector3.zero);
     }
 
     //главний гениратор
@@ -85,7 +90,17 @@ public class GeneratorLevel : MonoBehaviour
     //StartUdalenia
     private void del()
     {
-        StartCoroutine(delC(Dell[Dell.Count-1]));
+        StartCoroutine(delC(Dell[Dell.Count - 1]));
+    }
+
+    private void delR()
+    {
+        for (int i = 0; i < Dell.Count; i++)
+        {
+            if (Dell[i] != null)
+                Destroy(Dell[i]);
+        }
+        Dell = new List<GameObject>();
     }
 
     public IEnumerator delC(GameObject OBject)
@@ -111,7 +126,15 @@ public class GeneratorLevel : MonoBehaviour
         zbros();
         if (Dell.Count != 0)
             del();
-        StartCoroutine(generitKadar(kord+ smesemiaTemno));
+        StartCoroutine(generitKadar(kord + smesemiaTemno));
+    }
+
+    public void generitRES(Vector3 kord)
+    {
+        zbros();
+        if (Dell.Count != 0)
+            delR();
+        StartCoroutine(generitKadar(kord));
     }
 
     public void generit()
@@ -187,7 +210,7 @@ public class GeneratorLevel : MonoBehaviour
     //генирратор префабов
     private int GENprefabc(int i, Vector2 kord)
     {
-        for (int g = 0; g < 2; g++)
+        for (int g = 0; g < 1; g++)
             i = GENplatform(i, kord, false);
 
         int ran = Random.Range(0, Prepsta.Count);
@@ -198,7 +221,7 @@ public class GeneratorLevel : MonoBehaviour
         Dell.Add(Instantiate(Prepsta[ran], new Vector2(kord.x + i * Dolg, kord.y + Dolg), PrepstaZerkal[ran]? Zerkal(): Quaternion.identity));
         i += PrepstaDovz[ran];
 
-        for (int g = 0; g < 2; g++)
+        for (int g = 0; g < 1; g++)
             i = GENplatform(i, kord, false);
 
         return i;
@@ -207,7 +230,7 @@ public class GeneratorLevel : MonoBehaviour
     //генирратор префабов вибраних
     private int GENprefabcClon(int i, Vector2 kord,int clonI = -1)
     {
-        for (int g = 0; g < 2; g++)
+        for (int g = 0; g < 1; g++)
             i = GENplatform(i, kord, false);
 
         int ran = clonI;
@@ -219,7 +242,7 @@ public class GeneratorLevel : MonoBehaviour
         Dell.Add(Instantiate(PrepstaClon[ran], new Vector2(kord.x + i * Dolg, kord.y + Dolg), PrepstaZerkalClon[ran] ? Zerkal() : Quaternion.identity));
         i += PrepstaDovzClon[ran];
 
-        for (int g = 0; g < 2; g++)
+        for (int g = 0; g < 1; g++)
             i = GENplatform(i, kord, false);
 
         return i;
@@ -245,7 +268,7 @@ public class GeneratorLevel : MonoBehaviour
             i = GENplatform(i, kord);
         return i;
     }
-
+    
     //генирратор леани и 2 яруса
     private bool isDvuska_GENplatformEtaz = false;
     private Vector2 smesenia_GENplatformEtaz = new Vector2(0, 24);

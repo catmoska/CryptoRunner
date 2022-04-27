@@ -1,24 +1,39 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 
-// при назатие кнопки старт в мену заходет в игру
+// запуск
 public class UiStart : MonoBehaviour
 {
-    public Text Setsick;
-    [SerializeField] private int Serse;
+    public GameObject menu;
+    public UnityEvent HitStart;
+    public bool autaStart;
+    private bool onlain;
+    private bool Zagruzka;
+    public MasterLevel ML;
 
-    private void Update()
+    private void Start()
     {
-        Setsick.text = Serse.ToString();
+        menu.SetActive(true);
+        if (ML == null)
+            ML = GetComponent<MasterLevel>();
+        onlain = ML.onlain;
+        Zagruzka = ML.Zagruzka;
+        if (autaStart) StartButton();
     }
 
-    // проверка
     public void StartButton()
     {
-        if (Serse > 0 || Serse == -1)
-            SceneManager.LoadScene(1);
+        onlain = ML.onlain;
+        Zagruzka = ML.Zagruzka;
+
+        if (!onlain || !Zagruzka)
+        {
+            HitStart.Invoke();
+            menu.SetActive(false);
+        }
     }
 
 }

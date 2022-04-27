@@ -30,4 +30,9 @@ public class UiSpisac : MonoBehaviour
     {
         return Moneu;
     }
+
+    public void moneuReset()
+    {
+        Moneu = 0;
+    }
 }
