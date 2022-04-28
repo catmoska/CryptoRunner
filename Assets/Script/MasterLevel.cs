@@ -20,6 +20,7 @@ public class MasterLevel : MonoBehaviour
     public static bool isMusic = true;//MasterLevel.isMusic
 
     [Header("Life")]
+    public Text distansia;
     public UiSpisac US;
     public bool besmert;
     public Transform pleir;
@@ -38,6 +39,7 @@ public class MasterLevel : MonoBehaviour
     public UnityEvent HitStart;
 
     [Header("PleirSposobnasti")]
+    public PleirControlir PC;
     public bool onlain;
     public int skin;
     public bool Zagruzka = true;
@@ -53,6 +55,8 @@ public class MasterLevel : MonoBehaviour
 
     private void Start()
     {
+        if (PC == null)
+            PC = pleir.GetComponent<PleirControlir>();
         if (US == null)
             US = GetComponent<UiSpisac>();
         pausNOvisual();
@@ -68,6 +72,8 @@ public class MasterLevel : MonoBehaviour
         }
         if (Zagruzka && onlain)
             conect();
+
+        distansia.text = ((int)(pleir.position.x) - PC.StrtPosision.x).ToString();
     }
 
 
@@ -188,7 +194,7 @@ public class MasterLevel : MonoBehaviour
         PausObject.SetActive(false);
         SetingsObject.SetActive(false);
         PunktObject.SetActive(false);
-        Rec.text = ((int)(pleir.position.x)).ToString();
+        Rec.text = ((int)(pleir.position.x) - PC.StrtPosision.x).ToString();
         mon.text = US.GetMoneu().ToString();
 
         if(onlain)
