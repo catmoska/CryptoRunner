@@ -120,15 +120,17 @@ public class MasterNet : MonoBehaviour
                 case UnityWebRequest.Result.ConnectionError:
                 case UnityWebRequest.Result.DataProcessingError:
                     Debug.LogError(pages[page] + ": Error: " + webRequest.error);
+                    date = "EroorNet";
                     break;
                 case UnityWebRequest.Result.ProtocolError:
                     Debug.LogError(pages[page] + ": HTTP Error: " + webRequest.error);
+                    date = "EroorNet";
                     break;
                 case UnityWebRequest.Result.Success:
                     date = webRequest.downloadHandler.text;
-                    zanusk = false;
                     break;
             }
+            zanusk = false;
         }
     }
 }

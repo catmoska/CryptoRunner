@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Audio;
 using UnityEngine.UI;
 using UnityEngine.Events;
+using TMPro;
 
 public class MasterLevel : MonoBehaviour
 {
@@ -42,11 +43,17 @@ public class MasterLevel : MonoBehaviour
     public PleirControlir PC;
     public bool onlain;
     private bool Zagruzka = true;
+    private bool PleiBloc = false;
     private int skin;
+    public TextMeshProUGUI[] EroorVivod;
+
+    public float TimeEroorStart;
+    private float TimeEroor;
+
 
     public bool GetZagruzka()
     {
-        return Zagruzka;
+        return Zagruzka || PleiBloc;
     }
 
 
@@ -74,8 +81,17 @@ public class MasterLevel : MonoBehaviour
             TimeKill += TimeKillPlus;
             Life++;
         }
-        if (Zagruzka && onlain)
-            conect();
+
+        if (onlain)
+        {
+            if (Zagruzka)
+                conect();
+            else if (PleiBloc)
+            {
+                if (TimeEroor <= 0) Zagruzka = true;
+                TimeEroor -= Time.fixedDeltaTime;
+            }
+        }
 
         distansia.text = ((int)((pleir.position.x - PC.StrtPosision.x)/5)).ToString();
     }
@@ -90,12 +106,52 @@ public class MasterLevel : MonoBehaviour
 
     private void conect()
     {
-        string o = MN.GetRequest();
-        if (o == "")
+        string Otvet = MN.GetRequest();
+        if (Otvet != "")
+            Debug.Log("OtvetServer: " + Otvet);
+        if (Otvet == "")
             return;
+        else if (Otvet == "EroorPleirEnergia")
+        {
+            erorit("EroorPleirEnergia");
+            return;
+        }
+        else if (Otvet == "EroorNFTEnergia")
+        {
+            erorit("EroorNFTEnergia");
+            return;
+        }
+        else if (Otvet == "EroorNoPlei")
+        {
+            erorit("EroorNoPlei");
+            return;
+        }
+        else if (Otvet == "EroorNet")
+        {
+            erorit("EroorNet");
+            return;
+        }
+        erorit("",false);
         Zagruzka = false;
+        PleiBloc = false;
+
+        //обработка
+
     }
 
+
+    private void erorit(string text,bool tos = true)
+    {
+        if (tos)
+        {
+            PleiBloc = true;
+            paus();
+            Zagruzka = false;
+            TimeEroor = TimeEroorStart;
+        }
+        for (int i = 0; i< EroorVivod.Length;i++)
+            EroorVivod[i].text = text;
+    }
 
     //возрач€ет количество зизней
     public int Getlife()
@@ -115,11 +171,12 @@ public class MasterLevel : MonoBehaviour
     bool nervi = true;
     public void paus(bool Stop = false)
     {
+
         if (Zagruzka && !isPaus && !Stop && onlain && !nervi)
             return;
         nervi = false;
 
-        if (Stop)
+        if (Stop || PleiBloc)
             isPaus = false;
         else if (isIen)
             return;
