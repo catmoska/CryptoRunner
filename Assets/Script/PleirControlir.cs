@@ -5,6 +5,7 @@ using UnityEngine.Events;
 public class PleirControlir : MonoBehaviour
 {
     [Header("Moving")]
+    public float SpeedStart;
     public float Speed;
     public float SpeedX;
     public float Jamp;
@@ -92,6 +93,7 @@ public class PleirControlir : MonoBehaviour
         isGraund =1;
         Skin();
         transform.position = StrtPosision;
+        Speed = SpeedStart
     }
 
     private void FixedUpdate()
