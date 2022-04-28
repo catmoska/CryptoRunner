@@ -1,11 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ParallaxBackground_0 : MonoBehaviour
 {
-    public bool Camera_Move;
-    public float Camera_MoveSpeed = 1.5f;
     [Header("Layer Setting")]
     public float[] Layer_Speed = new float[7];
     public GameObject[] Layer_Objects = new GameObject[7];
@@ -15,7 +11,8 @@ public class ParallaxBackground_0 : MonoBehaviour
     private float boundSizeX;
     private float sizeX;
     private GameObject Layer_0;
-    void Start()
+
+    void Awake()
     {
         _camera = Camera.main.transform;
         sizeX = Layer_Objects[0].transform.localScale.x;
@@ -26,10 +23,6 @@ public class ParallaxBackground_0 : MonoBehaviour
     }
 
     void Update(){
-        //Moving camera
-        if (Camera_Move){
-        _camera.position += Vector3.right * Time.deltaTime * Camera_MoveSpeed;
-        }
         for (int i=0;i<5;i++){
             float temp = (_camera.position.x * (1-Layer_Speed[i]) );
             float distance = _camera.position.x  * Layer_Speed[i];

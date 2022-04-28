@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BackgroundControl_0 : MonoBehaviour
@@ -9,7 +7,8 @@ public class BackgroundControl_0 : MonoBehaviour
     public Sprite[] Layer_Sprites;
     private GameObject[] Layer_Object = new GameObject[5];
     private int max_backgroundNum = 3;
-    void Start()
+
+    void Awake()
     {
         for (int i = 0; i < Layer_Object.Length; i++){
             Layer_Object[i] = GameObject.Find("Layer_" + i);

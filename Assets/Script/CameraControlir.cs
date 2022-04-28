@@ -21,11 +21,16 @@ public class CameraControlir : MonoBehaviour
     //двигает камеру
     private void FixedUpdate()
     {
+        UpdateS();
+    }
+
+    public void UpdateS()
+    {
         Vector3 t = Pleir.position;
         for (int i = 0; i < camVis.Length; i++)
             if (t.y < camVis[i] * 2)
             {
-                t.y = camVis[i]; 
+                t.y = camVis[i];
                 break;
             }
         transform.position = t + smesenia;

@@ -41,12 +41,16 @@ public class MasterLevel : MonoBehaviour
     [Header("PleirSposobnasti")]
     public PleirControlir PC;
     public bool onlain;
-    public int skin;
-    public bool Zagruzka = true;
+    private bool Zagruzka = true;
+    private int skin;
+
+    public bool GetZagruzka()
+    {
+        return Zagruzka;
+    }
 
 
-
-    void Awake()
+    private void Awake()
     {
         if(onlain)
             MN.GetRequest();
@@ -73,15 +77,16 @@ public class MasterLevel : MonoBehaviour
         if (Zagruzka && onlain)
             conect();
 
-        distansia.text = ((int)(pleir.position.x) - PC.StrtPosision.x).ToString();
+        distansia.text = ((int)((pleir.position.x - PC.StrtPosision.x)/5)).ToString();
     }
 
 
     private void Update()
     {
-        if (Input.GetKey(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.E))
             reset();
     }
+
 
     private void conect()
     {
@@ -89,8 +94,6 @@ public class MasterLevel : MonoBehaviour
         if (o == "")
             return;
         Zagruzka = false;
-
-
     }
 
 
@@ -194,10 +197,10 @@ public class MasterLevel : MonoBehaviour
         PausObject.SetActive(false);
         SetingsObject.SetActive(false);
         PunktObject.SetActive(false);
-        Rec.text = ((int)(pleir.position.x) - PC.StrtPosision.x).ToString();
+        Rec.text = ((int)((pleir.position.x - PC.StrtPosision.x) / 5)).ToString();
         mon.text = US.GetMoneu().ToString();
 
         if(onlain)
-            MN.PostRequest(US.GetMoneu(), (int)(pleir.position.x));
+            MN.PostRequest(US.GetMoneu(), ((int)((pleir.position.x - PC.StrtPosision.x) / 5)));
     }
 }

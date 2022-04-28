@@ -30,32 +30,50 @@ public class GeneratorLevel : MonoBehaviour
     public int takt;
     public int taktKolibat;
     private int vidi = 4;
+    private float timer;
+    public float timerstart;
+    private int notok;
+
 
     private void Start()
     {
         generit();
     }
 
-    public void start()
+    private void FixedUpdate()
     {
-        generitRES(Vector3.zero);
+        if (timer > 0)
+            timer -= Time.fixedDeltaTime;
+        
+    }
+
+    private void start()
+    {
+        //if (timer <= 0)
+            generitRES(Vector3.zero);
     }
 
     //главний гениратор
     float moneusic;
     int biom;
-    public IEnumerator generitKadar(Vector2 kord)
+    private IEnumerator generitKadar(Vector2 kord)
     {
+        notok++;
+        int notokLokal = notok;
+
         int i;
         moneusic = 2;
         biom = Random.Range(0, Platform.Count / 2);
         int takti = Random.Range(takt - taktKolibat, takt + taktKolibat);
 
         yield return new WaitForSeconds(0.1f);
-        for (i = 0; i < 9; i++) GENplatform(i, kord, false);
+        for (i = 0; i < 5 && (notok == notokLokal); i++) 
+            GENplatform(i, kord, false);
         yield return new WaitForSeconds(Zaderzka);
-        for (; i < takti;)
+        for (; i < takti && (notok == notokLokal);)
         {
+            //if (notok != notokLokal) break;
+
             int u = Randik(vidi + 1);
             switch (u)
             {
@@ -76,15 +94,19 @@ public class GeneratorLevel : MonoBehaviour
                     break;
                 default:
                     i = GENplatform(i, kord);
-                    vidi = u;
                     Debug.LogError("типа нет ето EROOR :GeneratorLevel -> generitKadar : " + u.ToString());
+                    vidi = u;
                     break;
             }
             yield return new WaitForSeconds(Zaderzka);
         }
-        for (int g = 0; g < 10; g++) i = GENplatform(i, kord, false);
-        Dell.Add(Instantiate(Temno, new Vector2(kord.x + i * Dolg + smesemiaTemno.x, kord.y), Quaternion.identity));
-        yield return new WaitForSeconds(Zaderzka);
+
+        if (notok == notokLokal)
+        {
+            for (int g = 0; g < 10; g++) i = GENplatform(i, kord, false);
+            Dell.Add(Instantiate(Temno, new Vector2(kord.x + i * Dolg + smesemiaTemno.x, kord.y), Quaternion.identity));
+        }
+        yield return new WaitForSeconds(0);
     }
 
     //StartUdalenia
@@ -129,18 +151,19 @@ public class GeneratorLevel : MonoBehaviour
         StartCoroutine(generitKadar(kord + smesemiaTemno));
     }
 
-    public void generitRES(Vector3 kord)
+    private void generitRES(Vector3 kord)
     {
+        timer = timerstart;
         zbros();
         if (Dell.Count != 0)
             delR();
         StartCoroutine(generitKadar(kord));
+        
     }
 
-    public void generit()
+    private void generit()
     {
-        zbros();
-        StartCoroutine(generitKadar(Vector3.zero));
+        generitRES(Vector3.zero);
     }
 
     //уменшиний рандом

@@ -78,6 +78,7 @@ public class PleirControlir : MonoBehaviour
             isGraund--;
             isLiana = false;
             StartCoroutine(antiJamp(5));
+            StartCoroutine(gravitasia());
         }
     }
 
@@ -88,12 +89,12 @@ public class PleirControlir : MonoBehaviour
 
     public void start()
     {
-        if(rb == null)
+        if (rb == null)
             rb = GetComponent<Rigidbody2D>();
         isGraund =1;
         Skin();
         transform.position = StrtPosision;
-        Speed = SpeedStart
+        Speed = SpeedStart;
     }
 
     private void FixedUpdate()
@@ -115,13 +116,23 @@ public class PleirControlir : MonoBehaviour
     }
 
     // толчок в низ
-    public IEnumerator antiJamp(float sila = 1,float time = -1)
+    public IEnumerator antiJamp(float sila = 1, float time = -1)
     {
         time = (time == -1) ? 0.7f : time;
         yield return new WaitForSeconds(time);
         for (int i = 0; i < 20; i++)
         {
-            rb.AddForce(new Vector2(0, (-Jamp / 3 * sila) / 20), ForceMode2D.Impulse); 
+            rb.AddForce(new Vector2(0, (-Jamp / 3 * sila) / 20), ForceMode2D.Impulse);
+            yield return new WaitForSeconds(0.02f);
+        }
+    }
+
+    // gravitasia
+    public IEnumerator gravitasia()
+    {
+        for (int i = 0; i < 20; i++)
+        {
+            rb.AddForce(new Vector2(0, -gravitasion * Time.deltaTime*3), ForceMode2D.Impulse);
             yield return new WaitForSeconds(0.02f);
         }
     }
@@ -136,10 +147,8 @@ public class PleirControlir : MonoBehaviour
         else rb.AddForce(new Vector2(0, -gravitasion * Time.deltaTime), ForceMode2D.Impulse);
         //испраления бага до его появления
         if (isGraund < 0)
-        {
             isGraund = 0;
-            Debug.LogError("призок пошол по пи**е Eroor: PleirControlir ->yslov");
-        }
+            //Debug.LogError("призок пошол по пи**е Eroor: PleirControlir ->yslov");
     }
 
     //релизасия призка
@@ -148,7 +157,7 @@ public class PleirControlir : MonoBehaviour
         if (isLiana && (Input.GetKey(KeyCode.Space) && !MasterLevel.isPaus))
         {
             KarankanaLIana();
-            rb.AddForce(new Vector2(0, Jamp * Time.deltaTime * 2), ForceMode2D.Impulse);
+            rb.AddForce(new Vector2(0, Jamp * Time.deltaTime * (4f - transform.position.y/13)), ForceMode2D.Impulse);
         }
         else if (Input.GetKeyDown(KeyCode.Space) && (isGraund > 0 || isDubleJamp) && !MasterLevel.isPaus)
         {

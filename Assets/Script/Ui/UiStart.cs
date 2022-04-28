@@ -20,14 +20,14 @@ public class UiStart : MonoBehaviour
         if (ML == null)
             ML = GetComponent<MasterLevel>();
         onlain = ML.onlain;
-        Zagruzka = ML.Zagruzka;
+        Zagruzka = ML.GetZagruzka();
         if (autaStart) StartButton();
     }
 
     public void StartButton()
     {
         onlain = ML.onlain;
-        Zagruzka = ML.Zagruzka;
+        Zagruzka = ML.GetZagruzka();
 
         if (!onlain || !Zagruzka)
         {

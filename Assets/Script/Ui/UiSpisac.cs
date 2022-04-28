@@ -34,5 +34,6 @@ public class UiSpisac : MonoBehaviour
     public void moneuReset()
     {
         Moneu = 0;
+        moneuText.text = "0";
     }
 }
