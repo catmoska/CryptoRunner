@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-8408236813709112698
+--- !u!114 &-3120005847266712314
 MonoBehaviour:
   m_ObjectHideFlags: 3
   m_CorrespondingSourceObject: {fileID: 0}
@@ -9,29 +9,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b77c5407dc277943b591ade9e6b18c5, type: 3}
-  m_Name: LensDistortion
+  m_Script: {fileID: 11500000, guid: 556797029e73b2347956b6579e77e05b, type: 3}
+  m_Name: DepthOfField
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   enabled:
     overrideState: 1
     value: 1
-  intensity:
+  focusDistance:
+    overrideState: 0
+    value: 10
+  aperture:
     overrideState: 1
-    value: 0
-  intensityX:
-    overrideState: 0
-    value: 1
-  intensityY:
-    overrideState: 0
-    value: 1
-  centerX:
-    overrideState: 0
-    value: 0
-  centerY:
-    overrideState: 0
-    value: 0
-  scale:
+    value: 0.1
+  focalLength:
+    overrideState: 1
+    value: 300
+  kernelSize:
     overrideState: 0
     value: 1
 --- !u!114 &11400000
@@ -47,36 +41,9 @@ MonoBehaviour:
   m_Name: y
   m_EditorClassIdentifier: 
   settings:
-  - {fileID: 3108644499369175417}
-  - {fileID: -8408236813709112698}
-  - {fileID: 5813613879352750353}
---- !u!114 &3108644499369175417
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6050e2d5de785ce4d931e4dbdbf2d755, type: 3}
-  m_Name: ChromaticAberration
-  m_EditorClassIdentifier: 
-  active: 1
-  enabled:
-    overrideState: 1
-    value: 1
-  spectralLut:
-    overrideState: 0
-    value: {fileID: 0}
-    defaultState: 1
-  intensity:
-    overrideState: 1
-    value: 1
-  fastMode:
-    overrideState: 0
-    value: 1
---- !u!114 &5813613879352750353
+  - {fileID: -3120005847266712314}
+  - {fileID: 1535679403380482847}
+--- !u!114 &1535679403380482847
 MonoBehaviour:
   m_ObjectHideFlags: 3
   m_CorrespondingSourceObject: {fileID: 0}
@@ -97,18 +64,18 @@ MonoBehaviour:
     value: 0
   color:
     overrideState: 1
-    value: {r: 0.3018868, g: 0.3018868, b: 0.3018868, a: 1}
+    value: {r: 0.1509434, g: 0.1509434, b: 0.1509434, a: 1}
   center:
     overrideState: 0
     value: {x: 0.5, y: 0.5}
   intensity:
     overrideState: 1
-    value: 0.76
+    value: 0.36
   smoothness:
-    overrideState: 1
-    value: 1
+    overrideState: 0
+    value: 0.2
   roundness:
-    overrideState: 1
+    overrideState: 0
     value: 1
   rounded:
     overrideState: 0

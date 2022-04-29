@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.SceneManagement;
 using UnityEngine.Audio;
 using UnityEngine.UI;
@@ -13,6 +14,7 @@ public class MasterLevel : MonoBehaviour
     public GameObject PausObject;
     public Animator menu;
     public static bool isPaus = false;//MasterLevel.isPaus
+    public PostProcessVolume PPV;
 
     [Header("AudioMixer")]
     public Animator mus;
@@ -109,36 +111,32 @@ public class MasterLevel : MonoBehaviour
         string Otvet = MN.GetRequest();
         if (Otvet != "")
             Debug.Log("OtvetServer: " + Otvet);
-        if (Otvet == "")
-            return;
-        else if (Otvet == "EroorPleirEnergia")
-        {
-            erorit("EroorPleirEnergia");
-            return;
+
+        switch (Otvet) {
+            case "":
+                return;
+            case "EroorPleirEnergia":
+                erorit("EroorPleirEnergia");
+                return;
+            case "EroorNFT":
+                erorit("EroorNFT");
+                return;
+            case "EroorNFTEnergia":
+                erorit("EroorNFTEnergia");
+                return;
+            case "EroorNoPlei":
+                erorit("EroorNoPlei");
+                return;
+            case "EroorNet":
+                erorit("EroorNet");
+                return;
+            default:
+                erorit("", false);
+                Zagruzka = false;
+                PleiBloc = false;
+                break;
         }
-        else if (Otvet == "EroorNFT")
-        {
-            erorit("EroorNFT");
-            return;
-        }
-        else if (Otvet == "EroorNFTEnergia")
-        {
-            erorit("EroorNFTEnergia");
-            return;
-        }
-        else if (Otvet == "EroorNoPlei")
-        {
-            erorit("EroorNoPlei");
-            return;
-        }
-        else if (Otvet == "EroorNet")
-        {
-            erorit("EroorNet");
-            return;
-        }
-        erorit("",false);
-        Zagruzka = false;
-        PleiBloc = false;
+        
 
         //обработка
 
@@ -169,6 +167,7 @@ public class MasterLevel : MonoBehaviour
     public void pausNOvisual()
     {
         paus(false);
+        PPV.enabled = false;
         SetingsObject.SetActive(false);
     }
 
@@ -192,21 +191,26 @@ public class MasterLevel : MonoBehaviour
 
         if (isPaus)
             StartCoroutine(pausOff());
-        else
+        else 
+        {
+            PPV.enabled = true;
             SetingsObject.SetActive(true);
-
+        }
         mus.SetBool("mus", isMusic);
         isPaus = !isPaus;
     }
+
 
     public IEnumerator pausOff()
     {
         isIen = true;
         menu.SetBool("stop", true);
+        PPV.enabled = false;
         yield return new WaitForSeconds(0.15f);
         SetingsObject.SetActive(false);
         isIen = false;
     }
+
 
     //вкл/викл музику
     public void Music()
@@ -261,6 +265,7 @@ public class MasterLevel : MonoBehaviour
     {
         EndObject.SetActive(true);
         PausObject.SetActive(false);
+        PPV.enabled = true;
         SetingsObject.SetActive(false);
         PunktObject.SetActive(false);
         Rec.text = ((int)((pleir.position.x - PC.StrtPosision.x) / 5)).ToString();
@@ -269,4 +274,5 @@ public class MasterLevel : MonoBehaviour
         if(onlain)
             MN.PostRequest(US.GetMoneu(), ((int)((pleir.position.x - PC.StrtPosision.x) / 5)));
     }
+
 }

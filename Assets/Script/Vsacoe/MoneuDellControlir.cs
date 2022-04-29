@@ -4,6 +4,16 @@ using UnityEngine;
 //двизить монетку по вертикале и ишезает
 public class MoneuDellControlir : MonoBehaviour
 {
+    public bool nrig = true;
+    private void Start()
+    {
+        if (nrig && Random.Range(0, 5) == 0)
+        {
+            Animator an = GetComponent<Animator>();
+            an.SetBool("nerexod", true);
+        }
+    }
+
     public void start()
     {
         StartCoroutine(barerc());

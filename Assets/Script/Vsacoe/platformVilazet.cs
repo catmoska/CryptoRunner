@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class platformVilazet : MonoBehaviour
@@ -9,6 +7,7 @@ public class platformVilazet : MonoBehaviour
     [SerializeField] private Vector3 smesenia = new Vector3(0, -5,0);
     [SerializeField] private float triger = 15;
     [SerializeField] private float speed = 5;
+    public bool raznia;
 
     void Start()
     {
@@ -19,7 +18,10 @@ public class platformVilazet : MonoBehaviour
             Pleir = gos[0].GetComponent<Transform>();
         }
         nanravlenia = transform.position;
-        transform.position += smesenia;
+        if(raznia)
+            transform.position += smesenia * (1 +(Random.Range(0,2)* -2));
+        else 
+            transform.position += smesenia;
     }
 
     void FixedUpdate()

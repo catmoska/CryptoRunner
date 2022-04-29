@@ -22,6 +22,8 @@ public class PleirControlir : MonoBehaviour
     private int isGraund;
     private bool isDubleJamp;
     private bool isLiana;
+    private bool isJamp;
+
 
     // разное
     public float visataMira=50;
@@ -154,13 +156,14 @@ public class PleirControlir : MonoBehaviour
     //релизасия призка
     private void nrig()
     {
-        if (isLiana && (Input.GetKey(KeyCode.Space) && !MasterLevel.isPaus))
+        if (isLiana && ((Input.GetKey(KeyCode.Space)|| isJamp) && !MasterLevel.isPaus))
         {
             KarankanaLIana();
             rb.AddForce(new Vector2(0, Jamp * Time.deltaTime * (4f - transform.position.y/13)), ForceMode2D.Impulse);
         }
-        else if (Input.GetKeyDown(KeyCode.Space) && (isGraund > 0 || isDubleJamp) && !MasterLevel.isPaus)
+        else if ((Input.GetKeyDown(KeyCode.Space)|| isJamp) && (isGraund > 0 || isDubleJamp) && !MasterLevel.isPaus)
         {
+            isJamp = false;
             rb.velocity *= 0f;
             if (isGraund == 0) isDubleJamp = false;
             isGraund = 0;
@@ -169,6 +172,16 @@ public class PleirControlir : MonoBehaviour
             nrizok();
         }
         else Idot();
+    }
+
+    public void jampicON()
+    {
+        isJamp = true;
+    }
+
+    public void jampicOFF()
+    {
+        isJamp = false;
     }
 
     //пауза Rigidbody2D
@@ -201,6 +214,8 @@ public class PleirControlir : MonoBehaviour
     {
 
     }
+
+    
 
     private void KarankanaLIana()
     {

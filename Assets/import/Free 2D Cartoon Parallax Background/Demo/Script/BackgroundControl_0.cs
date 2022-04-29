@@ -36,11 +36,13 @@ public class BackgroundControl_0 : MonoBehaviour
     }
 
     public void NextBG(){
+        if (!gameObject.activeInHierarchy) return;
         backgroundNum = backgroundNum + 1;
         if (backgroundNum > max_backgroundNum) backgroundNum = 0;
         ChangeSprite();
     }
     public void BackBG(){
+        if (!gameObject.activeInHierarchy) return;
         backgroundNum = backgroundNum - 1;
         if (backgroundNum < 0) backgroundNum = max_backgroundNum;
         ChangeSprite();

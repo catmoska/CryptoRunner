@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class GeneratorLevel : MonoBehaviour
 {
@@ -34,6 +35,7 @@ public class GeneratorLevel : MonoBehaviour
     private float timer;
     public float timerstart;
     private int notok;
+    public UnityEvent HitRegenerit;
 
 
     private void Start()
@@ -59,6 +61,7 @@ public class GeneratorLevel : MonoBehaviour
     int biom;
     private IEnumerator generitKadar(Vector2 kord)
     {
+        HitRegenerit.Invoke();
         notok++;
         int notokLokal = notok;
 
@@ -165,7 +168,6 @@ public class GeneratorLevel : MonoBehaviour
         if (Dell.Count != 0)
             delR();
         StartCoroutine(generitKadar(kord));
-        
     }
 
     private void generit()
@@ -350,7 +352,7 @@ public class GeneratorLevel : MonoBehaviour
     {
         int rand = Random.Range(ranNar_GENplatVisaco.x, ranNar_GENplatVisaco.y);
 
-        for (int g = 0; g < 3; g++)
+        for (int g = 0; g < 1; g++)
             i = GENplatform(i, kord, false);
 
         i = GENplatform(i, kord, true, false);
@@ -385,6 +387,7 @@ public class GeneratorLevel : MonoBehaviour
         for (int g = 0; g < 3; g++)
             i = GENplatform(i, kord, false);
 
+        bool raznia = Random.Range(0, 2) != 0;
         int iN = i;
         Dell.Add(Instantiate(PlatformLeft[Random.Range(0, 2) + biom * 2], new Vector2(kord.x + i * Dolg, kord.y)+ smesenia_GENnlatformSip, Quaternion.identity)); i++;
         for (int g = 0; g < ran-2; g++)
@@ -393,6 +396,8 @@ public class GeneratorLevel : MonoBehaviour
             GameObject obg = Instantiate(Platform[Random.Range(0, 2) + biom * 2], new Vector2(kord.x + i * Dolg, kord.y)+ smesenia_GENnlatformSip, Zerkal());
             Dell.Add(obg);
             obg.AddComponent<platformVilazet>();
+            platformVilazet obg2 = obg.GetComponent<platformVilazet>();
+            obg2.raznia = raznia;
             i += Random.Range(0, 3)+1;
         }
         Dell.Add(Instantiate(PlatformRight[Random.Range(0, 2) + biom * 2], new Vector2(kord.x + i * Dolg, kord.y) + smesenia_GENnlatformSip, Quaternion.identity)); i++;
