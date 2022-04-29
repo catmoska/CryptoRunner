@@ -16,6 +16,7 @@ public class GeneratorLevel : MonoBehaviour
     public List<GameObject> PrepstaClon;
     public List<int> PrepstaDovzClon;
     public List<bool> PrepstaZerkalClon;
+    public List<bool> PrepstaPlatformClon;
     public List<GameObject> Kill;
     public List<GameObject> KillMelas;
     public List<GameObject> KillKrupnac;
@@ -29,7 +30,7 @@ public class GeneratorLevel : MonoBehaviour
     //nrodolzitolnast
     public int takt;
     public int taktKolibat;
-    private int vidi = 4;
+    private int vidi = 6;
     private float timer;
     public float timerstart;
     private int notok;
@@ -89,7 +90,13 @@ public class GeneratorLevel : MonoBehaviour
                 case 3://генирратор платформ вес€сих в воздухе
                     i = GENnlatformSip(i, kord);
                     break;
-                case 4://генирратор леани и 2 €руса
+                case 4://генирратор головних кристалов
+                    i = GENplatVisaco(i, kord);
+                    break;
+                case 5://генирратор  платформ с низу
+                    i = GENplatformNoava(i, kord);
+                    break;
+                case 6://генирратор леани и 2 €руса
                     i = GENplatformEtaz(i, kord);
                     break;
                 default:
@@ -184,6 +191,7 @@ public class GeneratorLevel : MonoBehaviour
     //збрасивает все параметри до дефолт
     private void zbros()
     {
+        isDvuska_GENplatformNoava = false;
         isDvuska_GENplatformEtaz = false;
     }
 
@@ -251,22 +259,29 @@ public class GeneratorLevel : MonoBehaviour
     }
 
     //генирратор префабов вибраних
-    private int GENprefabcClon(int i, Vector2 kord,int clonI = -1)
+    private int GENprefabcClon(int i, Vector2 kord,int clonI = -1, Quaternion novarot = new Quaternion())
     {
-        for (int g = 0; g < 1; g++)
-            i = GENplatform(i, kord, false);
+        if (PrepstaPlatformClon[clonI])
+            for (int g = 0; g < 1; g++)
+                i = GENplatform(i, kord, false);
 
         int ran = clonI;
         if (clonI == -1) ran = Random.Range(0, PrepstaClon.Count);
 
-        for (int g = 0; g < PrepstaDovzClon[ran]; g++)
-            Dell.Add(Instantiate(Platform[Random.Range(0, 2) + biom * 2], new Vector2(kord.x + (g+i) * Dolg , kord.y), Zerkal()));
+        if (PrepstaPlatformClon[clonI])
+        {
+            for (int g = 0; g < PrepstaDovzClon[ran]; g++)
+                Dell.Add(Instantiate(Platform[Random.Range(0, 2) + biom * 2], new Vector2(kord.x + (g + i) * Dolg, kord.y),
+                    (novarot == new Quaternion()) ? Zerkal() : novarot));
+        }
 
-        Dell.Add(Instantiate(PrepstaClon[ran], new Vector2(kord.x + i * Dolg, kord.y + Dolg), PrepstaZerkalClon[ran] ? Zerkal() : Quaternion.identity));
+        Dell.Add(Instantiate(PrepstaClon[ran], new Vector2(kord.x + i * Dolg, kord.y + Dolg), 
+            (novarot == new Quaternion()) ? (PrepstaZerkalClon[ran] ? Zerkal() : Quaternion.identity) : novarot));
         i += PrepstaDovzClon[ran];
 
-        for (int g = 0; g < 1; g++)
-            i = GENplatform(i, kord, false);
+        if (PrepstaPlatformClon[clonI])
+            for (int g = 0; g < 1; g++)
+                i = GENplatform(i, kord, false);
 
         return i;
     }
@@ -291,38 +306,108 @@ public class GeneratorLevel : MonoBehaviour
             i = GENplatform(i, kord);
         return i;
     }
-    
+
     //генирратор леани и 2 €руса
     private bool isDvuska_GENplatformEtaz = false;
     private Vector2 smesenia_GENplatformEtaz = new Vector2(0, 24);
     private Vector2Int ranNar_GENplatformEtaz = new Vector2Int(10, 25);
     private int GENplatformEtaz(int i, Vector2 kord)
     {
-        if(isDvuska_GENplatformEtaz || Random.Range(0,5)!=0) return i;
+        if (isDvuska_GENplatformEtaz || Random.Range(0, 5) != 0) return i;
         isDvuska_GENplatformEtaz = true;
 
         int rand = Random.Range(ranNar_GENplatformEtaz.x, ranNar_GENplatformEtaz.y);
 
-        for (int g = 0; g < 3; g++) 
+        for (int g = 0; g < 3; g++)
             i = GENplatform(i, kord, false);
 
-        i = GENprefabcClon(i, kord,0);
+        i = GENprefabcClon(i, kord, 0);
 
         Dell.Add(Instantiate(PlatformLeft[Random.Range(0, 2) + biom * 2], new Vector2(kord.x + i * Dolg, kord.y) + smesenia_GENplatformEtaz, Quaternion.identity)); i++;
-        for (int g = 0; g < rand-2; g++) 
-            i = GENplatform(i, kord+ smesenia_GENplatformEtaz,true,false);
+        for (int g = 0; g < rand - 2; g++)
+            i = GENplatform(i, kord + smesenia_GENplatformEtaz, true, false);
         Dell.Add(Instantiate(PlatformRight[Random.Range(0, 2) + biom * 2], new Vector2(kord.x + i * Dolg, kord.y) + smesenia_GENplatformEtaz, Quaternion.identity)); i++;
-        
+
         int ii = i;
         i -= rand;
 
-        for (int g = 0; g < rand/2; g++) 
+        for (int g = 0; g < rand / 2; g++)
             i = GENplatform(i, kord);
         i = GENnlatformSip(i, kord);
-        while(ii-i >=-2) 
+        while (ii - i >= -2)
             i = GENplatform(i, kord);
-        for (int g = 0; g < 5; g++) 
+        for (int g = 0; g < 5; g++)
             i = GENplatform(i, kord);
+        return i;
+    }
+
+    //генирратор головних кристалов
+    private Vector2 smesenia_GENplatVisaco = new Vector2(0, 8.5f);
+    private Vector2 smesenia2_GENplatVisaco = new Vector2(0, 4);
+    private Vector2 smesenia3_GENplatVisaco = new Vector2(0, 6);
+    private Vector2Int ranNar_GENplatVisaco = new Vector2Int(3, 5);
+    private int GENplatVisaco(int i, Vector2 kord)
+    {
+        int rand = Random.Range(ranNar_GENplatVisaco.x, ranNar_GENplatVisaco.y);
+
+        for (int g = 0; g < 3; g++)
+            i = GENplatform(i, kord, false);
+
+        i = GENplatform(i, kord, true, false);
+        GENprefabcClon(i, kord + smesenia3_GENplatVisaco, Random.Range(1, 3), Quaternion.Euler(new Vector3(0, 0, 90)));
+
+        for (int g = 0; g < rand; g++)
+        {
+            i = GENplatform(i, kord, true, false);
+            GENplatform(i, kord + smesenia_GENplatVisaco, false);
+            GENprefabcClon(i, kord + smesenia2_GENplatVisaco, Random.Range(1, 3), new Quaternion(180, 0, 0, 0));
+        }
+
+        i = GENplatform(i, kord, true, false);
+        GENprefabcClon(i, kord + smesenia3_GENplatVisaco, Random.Range(1, 3), Quaternion.Euler(new Vector3(0, 0, -90)));
+
+        for (int g = 0; g < 3; g++)
+            i = GENplatform(i, kord, false);
+
+        return i;
+    }
+
+    ////генирратор платформ с низу
+    private bool isDvuska_GENplatformNoava = false;
+    private Vector2Int ranNar_GENplatformNoava = new Vector2Int(10, 20);
+    private int GENplatformNoava(int i, Vector2 kord)
+    {
+        if (isDvuska_GENplatformNoava || Random.Range(0, 2) != 0) return i;
+        isDvuska_GENplatformEtaz = true;
+
+        int ran = Random.Range(ranNar_GENplatformNoava.x, ranNar_GENplatformNoava.y);
+
+        for (int g = 0; g < 3; g++)
+            i = GENplatform(i, kord, false);
+
+        int iN = i;
+        Dell.Add(Instantiate(PlatformLeft[Random.Range(0, 2) + biom * 2], new Vector2(kord.x + i * Dolg, kord.y)+ smesenia_GENnlatformSip, Quaternion.identity)); i++;
+        for (int g = 0; g < ran-2; g++)
+        {
+            GENmoneu(i, kord+ smesenia_GENnlatformSip, false);
+            GameObject obg = Instantiate(Platform[Random.Range(0, 2) + biom * 2], new Vector2(kord.x + i * Dolg, kord.y)+ smesenia_GENnlatformSip, Zerkal());
+            Dell.Add(obg);
+            obg.AddComponent<platformVilazet>();
+            i += Random.Range(0, 3)+1;
+        }
+        Dell.Add(Instantiate(PlatformRight[Random.Range(0, 2) + biom * 2], new Vector2(kord.x + i * Dolg, kord.y) + smesenia_GENnlatformSip, Quaternion.identity)); i++;
+        
+        int ip = i;
+        i = iN;
+
+        int ran2 = Random.Range(0, Kill.Count);
+        for (int g = 0; g < ip-iN; g++)
+            Dell.Add(Instantiate(Kill[ran2], new Vector2(kord.x + (i + g) * Dolg, kord.y), Zerkal()));
+        i = ip;
+
+        for (int g = 0; g < 3; g++)
+            i = GENplatform(i, kord, false);
+
         return i;
     }
 }

@@ -116,6 +116,11 @@ public class MasterLevel : MonoBehaviour
             erorit("EroorPleirEnergia");
             return;
         }
+        else if (Otvet == "EroorNFT")
+        {
+            erorit("EroorNFT");
+            return;
+        }
         else if (Otvet == "EroorNFTEnergia")
         {
             erorit("EroorNFTEnergia");
@@ -145,7 +150,7 @@ public class MasterLevel : MonoBehaviour
         if (tos)
         {
             PleiBloc = true;
-            paus();
+            paus(true);
             Zagruzka = false;
             TimeEroor = TimeEroorStart;
         }
@@ -220,6 +225,10 @@ public class MasterLevel : MonoBehaviour
     {
         if (isPaus) paus();
         //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+
+        if (onlain)
+            Zagruzka = true;
+        
 
         EndObject.SetActive(false);
         PunktObject.SetActive(true);
