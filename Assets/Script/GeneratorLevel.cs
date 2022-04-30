@@ -22,8 +22,9 @@ public class GeneratorLevel : MonoBehaviour
     public List<GameObject> KillMelas;
     public List<GameObject> KillKrupnac;
     public GameObject Moneu;
+    public GameObject Energia;
     public GameObject Temno;
-    public Vector3 smesemiaTemno = new Vector3(19f, 0);
+    public Vector3 smesemiaTemno = new Vector3(18, 0);
 
     //dell
     public List<GameObject> Dell;
@@ -47,13 +48,13 @@ public class GeneratorLevel : MonoBehaviour
     {
         if (timer > 0)
             timer -= Time.fixedDeltaTime;
-        
+
     }
 
     private void start()
     {
         //if (timer <= 0)
-            generitRES(Vector3.zero);
+        generitRES(Vector3.zero);
     }
 
     //главний гениратор
@@ -71,7 +72,7 @@ public class GeneratorLevel : MonoBehaviour
         int takti = Random.Range(takt - taktKolibat, takt + taktKolibat);
 
         yield return new WaitForSeconds(0.1f);
-        for (i = 0; i < 5 && (notok == notokLokal); i++) 
+        for (i = 0; i < 5 && (notok == notokLokal); i++)
             GENplatform(i, kord, false);
         yield return new WaitForSeconds(Zaderzka);
         for (; i < takti && (notok == notokLokal);)
@@ -93,11 +94,11 @@ public class GeneratorLevel : MonoBehaviour
                 case 3://генирратор платформ вес€сих в воздухе
                     i = GENnlatformSip(i, kord);
                     break;
-                case 4://генирратор головних кристалов
-                    i = GENplatVisaco(i, kord);
-                    break;
-                case 5://генирратор  платформ с низу
+                case 4://генирратор  платформ с низу
                     i = GENplatformNoava(i, kord);
+                    break;
+                case 5://генирратор головних кристалов
+                    i = GENplatVisaco(i, kord);
                     break;
                 case 6://генирратор леани и 2 €руса
                     i = GENplatformEtaz(i, kord);
@@ -142,7 +143,7 @@ public class GeneratorLevel : MonoBehaviour
 
         for (int i = 0; i < Dell2.Count - 1; i++)
         {
-            if ((i%50)==0)
+            if ((i % 50) == 0)
                 yield return new WaitForSeconds(0);
             if (Dell2[i] != null)
                 Destroy(Dell2[i]);
@@ -180,8 +181,8 @@ public class GeneratorLevel : MonoBehaviour
     {
         for (int i = 0; i < Max; i++)
             if (Random.Range(0, 2) == 0)
-                    return i;
-        return Max-1;
+                return i;
+        return Max - 1;
     }
 
     //делает случаино поворот
@@ -214,15 +215,18 @@ public class GeneratorLevel : MonoBehaviour
             moneusic *= 3;
             if (Random.Range(0, 6) != 5 || !uron)
                 Dell.Add(Instantiate(Moneu, new Vector2(kord.x + i * Dolg, kord.y + Dolg), Quaternion.identity));
+            else if (Random.Range(0, 100) == 0)
+                Dell.Add(Instantiate(Energia, new Vector2(kord.x + i * Dolg, kord.y + Dolg), Quaternion.identity));
             else
-                Dell.Add(Instantiate(Kill[Random.Range(0, Kill.Count)], new Vector2(kord.x + i * Dolg, kord.y + Dolg-0.5f), Zerkal()));
+                Dell.Add(Instantiate(Kill[Random.Range(0, Kill.Count)], new Vector2(kord.x + i * Dolg, kord.y + Dolg - 0.5f), Zerkal()));
+
         }
         else
             moneusic /= 2;
     }
 
     //генирратор платформ
-    private int GENplatform(int i, Vector2 kord, bool mon = true,bool uron = true)
+    private int GENplatform(int i, Vector2 kord, bool mon = true, bool uron = true)
     {
         if (mon)
             GENmoneu(i, kord, uron);
@@ -251,7 +255,7 @@ public class GeneratorLevel : MonoBehaviour
         for (int g = 0; g < PrepstaDovz[ran]; g++)
             Dell.Add(Instantiate(Platform[Random.Range(0, 2) + biom * 2], new Vector2(kord.x + (g + i) * Dolg, kord.y), Zerkal()));
 
-        Dell.Add(Instantiate(Prepsta[ran], new Vector2(kord.x + i * Dolg, kord.y + Dolg), PrepstaZerkal[ran]? Zerkal(): Quaternion.identity));
+        Dell.Add(Instantiate(Prepsta[ran], new Vector2(kord.x + i * Dolg, kord.y + Dolg), PrepstaZerkal[ran] ? Zerkal() : Quaternion.identity));
         i += PrepstaDovz[ran];
 
         for (int g = 0; g < 1; g++)
@@ -261,7 +265,7 @@ public class GeneratorLevel : MonoBehaviour
     }
 
     //генирратор префабов вибраних
-    private int GENprefabcClon(int i, Vector2 kord,int clonI = -1, Quaternion novarot = new Quaternion())
+    private int GENprefabcClon(int i, Vector2 kord, int clonI = -1, Quaternion novarot = new Quaternion())
     {
         if (PrepstaPlatformClon[clonI])
             for (int g = 0; g < 1; g++)
@@ -277,7 +281,7 @@ public class GeneratorLevel : MonoBehaviour
                     (novarot == new Quaternion()) ? Zerkal() : novarot));
         }
 
-        Dell.Add(Instantiate(PrepstaClon[ran], new Vector2(kord.x + i * Dolg, kord.y + Dolg), 
+        Dell.Add(Instantiate(PrepstaClon[ran], new Vector2(kord.x + i * Dolg, kord.y + Dolg),
             (novarot == new Quaternion()) ? (PrepstaZerkalClon[ran] ? Zerkal() : Quaternion.identity) : novarot));
         i += PrepstaDovzClon[ran];
 
@@ -296,13 +300,13 @@ public class GeneratorLevel : MonoBehaviour
         int ran = Random.Range(ranNar_GENnlatformSip.x, ranNar_GENnlatformSip.y);
         int ran2 = Random.Range(0, Kill.Count);
         for (int g = 0; g < ran; g++)
-            Dell.Add(Instantiate(Kill[ran2], new Vector2(kord.x + (i+g) * Dolg, kord.y), Zerkal()));
+            Dell.Add(Instantiate(Kill[ran2], new Vector2(kord.x + (i + g) * Dolg, kord.y), Zerkal()));
 
         i++;
-        Dell.Add(Instantiate(PlatformLeft[Random.Range(0, 2) + biom * 2], new Vector2(kord.x + i * Dolg, kord.y+smesenia_GENnlatformSip.y), Quaternion.identity));i++;
+        Dell.Add(Instantiate(PlatformLeft[Random.Range(0, 2) + biom * 2], new Vector2(kord.x + i * Dolg, kord.y + smesenia_GENnlatformSip.y), Quaternion.identity)); i++;
         for (int g = 0; g < ran - 4; g++)
-            i = GENplatform(i, kord+ smesenia_GENnlatformSip);
-        Dell.Add(Instantiate(PlatformRight[Random.Range(0, 2) + biom * 2], new Vector2(kord.x + i * Dolg, kord.y+smesenia_GENnlatformSip.y), Quaternion.identity));i++;
+            i = GENplatform(i, kord + smesenia_GENnlatformSip);
+        Dell.Add(Instantiate(PlatformRight[Random.Range(0, 2) + biom * 2], new Vector2(kord.x + i * Dolg, kord.y + smesenia_GENnlatformSip.y), Quaternion.identity)); i++;
         i++;
         for (int g = 0; g < ran / 2; g++)
             i = GENplatform(i, kord);
@@ -315,7 +319,7 @@ public class GeneratorLevel : MonoBehaviour
     private Vector2Int ranNar_GENplatformEtaz = new Vector2Int(10, 25);
     private int GENplatformEtaz(int i, Vector2 kord)
     {
-        if (isDvuska_GENplatformEtaz || Random.Range(0, 5) != 0) return i;
+        if (isDvuska_GENplatformEtaz || Random.Range(0, 2) != 0) return i;
         isDvuska_GENplatformEtaz = true;
 
         int rand = Random.Range(ranNar_GENplatformEtaz.x, ranNar_GENplatformEtaz.y);
@@ -360,6 +364,8 @@ public class GeneratorLevel : MonoBehaviour
 
         for (int g = 0; g < rand; g++)
         {
+            if (((rand+1) / 2) == g)
+                GENprefabcClon(i, kord + smesenia_GENplatVisaco+new Vector2(0,1),3);
             i = GENplatform(i, kord, true, false);
             GENplatform(i, kord + smesenia_GENplatVisaco, false);
             GENprefabcClon(i, kord + smesenia2_GENplatVisaco, Random.Range(1, 3), new Quaternion(180, 0, 0, 0));
@@ -379,8 +385,8 @@ public class GeneratorLevel : MonoBehaviour
     private Vector2Int ranNar_GENplatformNoava = new Vector2Int(10, 20);
     private int GENplatformNoava(int i, Vector2 kord)
     {
-        if (isDvuska_GENplatformNoava || Random.Range(0, 2) != 0) return i;
-        isDvuska_GENplatformEtaz = true;
+        if (isDvuska_GENplatformNoava) return i;
+        isDvuska_GENplatformNoava = true;
 
         int ran = Random.Range(ranNar_GENplatformNoava.x, ranNar_GENplatformNoava.y);
 
@@ -389,24 +395,24 @@ public class GeneratorLevel : MonoBehaviour
 
         bool raznia = Random.Range(0, 2) != 0;
         int iN = i;
-        Dell.Add(Instantiate(PlatformLeft[Random.Range(0, 2) + biom * 2], new Vector2(kord.x + i * Dolg, kord.y)+ smesenia_GENnlatformSip, Quaternion.identity)); i++;
-        for (int g = 0; g < ran-2; g++)
+        Dell.Add(Instantiate(PlatformLeft[Random.Range(0, 2) + biom * 2], new Vector2(kord.x + i * Dolg, kord.y) + smesenia_GENnlatformSip, Quaternion.identity)); i++;
+        for (int g = 0; g < ran - 2; g++)
         {
-            GENmoneu(i, kord+ smesenia_GENnlatformSip, false);
-            GameObject obg = Instantiate(Platform[Random.Range(0, 2) + biom * 2], new Vector2(kord.x + i * Dolg, kord.y)+ smesenia_GENnlatformSip, Zerkal());
+            GENmoneu(i, kord + smesenia_GENnlatformSip, false);
+            GameObject obg = Instantiate(Platform[Random.Range(0, 2) + biom * 2], new Vector2(kord.x + i * Dolg, kord.y) + smesenia_GENnlatformSip, Zerkal());
             Dell.Add(obg);
             obg.AddComponent<platformVilazet>();
             platformVilazet obg2 = obg.GetComponent<platformVilazet>();
             obg2.raznia = raznia;
-            i += Random.Range(0, 3)+1;
+            i += Randik(3) + 1;
         }
         Dell.Add(Instantiate(PlatformRight[Random.Range(0, 2) + biom * 2], new Vector2(kord.x + i * Dolg, kord.y) + smesenia_GENnlatformSip, Quaternion.identity)); i++;
-        
+
         int ip = i;
         i = iN;
 
         int ran2 = Random.Range(0, Kill.Count);
-        for (int g = 0; g < ip-iN; g++)
+        for (int g = 0; g < ip - iN; g++)
             Dell.Add(Instantiate(Kill[ran2], new Vector2(kord.x + (i + g) * Dolg, kord.y), Zerkal()));
         i = ip;
 

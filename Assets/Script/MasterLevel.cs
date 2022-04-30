@@ -1,11 +1,12 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.Audio;
+using UnityEngine.Events;
 using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.SceneManagement;
-using UnityEngine.Audio;
-using UnityEngine.UI;
-using UnityEngine.Events;
-using TMPro;
 
 public class MasterLevel : MonoBehaviour
 {
@@ -19,25 +20,20 @@ public class MasterLevel : MonoBehaviour
     [Header("AudioMixer")]
     public Animator mus;
     public AudioMixer am;
-    public AudioMixerSnapshot[] AMSnap =new AudioMixerSnapshot[2];
+    public AudioMixerSnapshot[] AMSnap = new AudioMixerSnapshot[2];
     public static bool isMusic = true;//MasterLevel.isMusic
 
     [Header("Life")]
-    public Text distansia;
+    public TextMeshProUGUI distansia;
     public UiSpisac US;
     public bool besmert;
     public Transform pleir;
-    private int Life;
-    private int MaxLife = 200000;
-    private int time;
-    private int TimeKill;
-    private int TimeKillPlus = 60;
 
     [Header("END")]
     public GameObject EndObject;
     public GameObject PunktObject;
-    public Text mon;
-    public Text Rec;
+    public TextMeshProUGUI mon;
+    public TextMeshProUGUI Rec;
     public MasterNet MN;
     public UnityEvent HitStart;
 
@@ -46,22 +42,40 @@ public class MasterLevel : MonoBehaviour
     public bool onlain;
     private bool Zagruzka = true;
     private bool PleiBloc = false;
-    private int skin;
     public TextMeshProUGUI[] EroorVivod;
 
     public float TimeEroorStart;
     private float TimeEroor;
 
+    [Header("spesl")]
+    public GameObject Obusenia;
+    public GameObject record;
+    [Header("Menu")]
+    public TextMeshProUGUI PleirMenuMoney;
+    public TextMeshProUGUI PleirMenuEnergia;
+    public TextMeshProUGUI NFTMenuNeim;
+    public TextMeshProUGUI NFTMenuEnergia;
+    private jsonGETPleir resultat;
+    public int NFTVID = 0;
+
+
+
 
     public bool GetZagruzka()
     {
-        return Zagruzka || PleiBloc;
+        return (Zagruzka || PleiBloc) || (resultat.NFT[NFTVID].Energia <= 0);
     }
 
+    public void start()
+    {
+        recordTadlica();
+        if (resultat.nonitka)
+            StartCoroutine(strtObuseniaCoroutine());
+    }
 
     private void Awake()
     {
-        if(onlain)
+        if (onlain)
             MN.GetRequest();
     }
 
@@ -78,12 +92,6 @@ public class MasterLevel : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (Life < MaxLife && TimeKill + TimeKillPlus == time)
-        {
-            TimeKill += TimeKillPlus;
-            Life++;
-        }
-
         if (onlain)
         {
             if (Zagruzka)
@@ -95,7 +103,7 @@ public class MasterLevel : MonoBehaviour
             }
         }
 
-        distansia.text = ((int)((pleir.position.x - PC.StrtPosision.x)/5)).ToString();
+        distansia.text = ((int)((pleir.position.x - PC.StrtPosision.x) / 5)).ToString();
     }
 
 
@@ -109,24 +117,11 @@ public class MasterLevel : MonoBehaviour
     private void conect()
     {
         string Otvet = MN.GetRequest();
-        if (Otvet != "")
-            Debug.Log("OtvetServer: " + Otvet);
+        if (Otvet == "") return;
+        Debug.Log("OtvetServer: " + Otvet);
 
-        switch (Otvet) {
-            case "":
-                return;
-            case "EroorPleirEnergia":
-                erorit("EroorPleirEnergia");
-                return;
-            case "EroorNFT":
-                erorit("EroorNFT");
-                return;
-            case "EroorNFTEnergia":
-                erorit("EroorNFTEnergia");
-                return;
-            case "EroorNoPlei":
-                erorit("EroorNoPlei");
-                return;
+        switch (Otvet)
+        {
             case "EroorNet":
                 erorit("EroorNet");
                 return;
@@ -136,14 +131,128 @@ public class MasterLevel : MonoBehaviour
                 PleiBloc = false;
                 break;
         }
-        
 
-        //обработка
+        string Otvet2 = "";
+        for (int i = 0; i < Otvet.Length; i++)
+            if (Otvet[i] != '.')
+                Otvet2 += Otvet[i];
+            else
+                Otvet2 += ',';
+        Otvet = Otvet2;
 
+        resultat = new jsonGETPleir();
+
+
+        string[] jsonOtvet = new string[5];
+        int reset = 0;
+        for(int i = 0; i < Otvet.Length; i++)
+        {
+            switch (Otvet[i])
+            {
+                case '&':
+                    reset++;
+                    break;
+                case '$':
+                    reset = i+1;
+                    i = Otvet.Length;
+                    break;
+                default:
+                    jsonOtvet[reset] += Otvet[i];
+                    break;
+            }
+        }
+        //Debug.Log(jsonOtvet[0]);
+        //Debug.Log(jsonOtvet[1]);
+        //Debug.Log(jsonOtvet[2]);
+        //Debug.Log(jsonOtvet[3]);
+        //Debug.Log(jsonOtvet[4]);
+        resultat.Money = (float)Convert.ToDouble(jsonOtvet[0]);
+        resultat.Record = (float)Convert.ToDouble(jsonOtvet[1]);
+        resultat.Energia = Convert.ToInt32(jsonOtvet[2]);
+        resultat.EnergiaMax = Convert.ToInt32(jsonOtvet[3]);
+        resultat.nonitka = Convert.ToBoolean(jsonOtvet[4]);
+        jsonOtvet = new string[8];
+        int reset2 = 0;
+        for (int i = reset;i < Otvet.Length; i++)
+        {
+            switch (Otvet[i])
+            {
+                case '&':
+                    reset2++;
+                    break;
+                case '$':
+                    jsonGETNFT NFT = new jsonGETNFT();
+                    NFT.Energia = Convert.ToInt32(jsonOtvet[0]);
+                    NFT.EnergiaMax = Convert.ToInt32(jsonOtvet[1]);
+                    NFT.Nick = jsonOtvet[2];
+                    NFT.skin = Convert.ToInt32(jsonOtvet[3]);
+                    NFT.suit = Convert.ToInt32(jsonOtvet[4]);
+                    NFT.trousers = Convert.ToInt32(jsonOtvet[5]);
+                    NFT.cap = Convert.ToInt32(jsonOtvet[6]);
+                    NFT.gloves = Convert.ToInt32(jsonOtvet[7]);
+
+                    resultat.NFT.Add(NFT);
+                    jsonOtvet = new string[8];
+                    reset2 = 0;
+                    break;
+                default:
+                    jsonOtvet[reset2] += Otvet[i];
+                    break;
+            }
+        }
+        UndeitMenu();
+        recordTadlica();
+        Zagruzka = false;
     }
 
 
-    private void erorit(string text,bool tos = true)
+    private IEnumerator strtObuseniaCoroutine()
+    {
+        yield return new WaitForSeconds(3);
+        pausNOvisual();
+        SetingsObject.SetActive(false);
+        Obusenia.SetActive(true);
+    }
+
+    private void recordTadlica()
+    {
+        if(resultat.Record>10)
+            Instantiate(record, new Vector2(resultat.Record*3 + PC.StrtPosision.x, 10f), Quaternion.identity);
+    }
+
+
+    public void smenaNFT(bool y)
+    {
+        NFTVID += y ? 1 : -1;
+        if (NFTVID < 0) NFTVID = resultat.NFT.Count - 1;
+        else if (NFTVID >= resultat.NFT.Count) NFTVID = 0;
+        UndeitMenu();
+    }
+
+
+    public void UndeitMenu()
+    {
+        string Money = resultat.Money.ToString();
+        string EnergiaPleir = resultat.Energia.ToString();
+        string EnergiaMaxPleir = resultat.EnergiaMax.ToString();
+        string EnergiaNFT = resultat.NFT[NFTVID].Energia.ToString();
+        string EnergiaMaxNFT = resultat.NFT[NFTVID].EnergiaMax.ToString();
+        string NickNFT = resultat.NFT[NFTVID].Nick.ToString();
+
+        PleirMenuMoney.text = Money.ToString();
+        PleirMenuEnergia.text = EnergiaPleir.ToString() + "/" + EnergiaMaxPleir.ToString();
+
+        NFTMenuNeim.text = NickNFT;
+        NFTMenuEnergia.text = EnergiaNFT.ToString() + "/" + EnergiaMaxNFT.ToString();
+
+        if (resultat.Energia <= 0)
+            erorit("EroorEbergiaPleir", false);
+        else if (resultat.NFT.Count == 0)
+            erorit("EroorNFT", false);
+    }
+
+
+    private void erorit(string text, bool tos = true)
     {
         if (tos)
         {
@@ -152,14 +261,8 @@ public class MasterLevel : MonoBehaviour
             Zagruzka = false;
             TimeEroor = TimeEroorStart;
         }
-        for (int i = 0; i< EroorVivod.Length;i++)
+        for (int i = 0; i < EroorVivod.Length; i++)
             EroorVivod[i].text = text;
-    }
-
-    //возрачяет количество зизней
-    public int Getlife()
-    {
-        return Life;
     }
 
 
@@ -167,15 +270,15 @@ public class MasterLevel : MonoBehaviour
     public void pausNOvisual()
     {
         paus(false);
-        PPV.enabled = false;
+        //PPV.enabled = false;
         SetingsObject.SetActive(false);
     }
+
 
     bool isIen;
     bool nervi = true;
     public void paus(bool Stop = false)
     {
-
         if (Zagruzka && !isPaus && !Stop && onlain && !nervi)
             return;
         nervi = false;
@@ -191,13 +294,16 @@ public class MasterLevel : MonoBehaviour
 
         if (isPaus)
             StartCoroutine(pausOff());
-        else 
+        else
         {
             PPV.enabled = true;
             SetingsObject.SetActive(true);
         }
         mus.SetBool("mus", isMusic);
         isPaus = !isPaus;
+
+        if (Obusenia.activeInHierarchy)
+            Obusenia.SetActive(false);
     }
 
 
@@ -217,28 +323,31 @@ public class MasterLevel : MonoBehaviour
     {
         if (!isMusic)
             AMSnap[isPaus ? 1 : 0].TransitionTo(0.5f);
-        else 
+        else
             AMSnap[2].TransitionTo(0.5f);
 
         isMusic = !isMusic;
         mus.SetBool("mus", isMusic);
     }
 
+
     //ресет возрат
     public void reset()
     {
         if (isPaus) paus();
-        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 
-        if (onlain)
-            Zagruzka = true;
-        
 
         EndObject.SetActive(false);
         PunktObject.SetActive(true);
         US.moneuReset();
         HitStart.Invoke();
+
+        resultat.Energia--;
+        resultat.NFT[NFTVID].Energia--;
+        if (resultat.Energia <= 0 || resultat.NFT[NFTVID].Energia <= 0)
+            vozrat();
     }
+
 
     //возрат в мену
     public void vozrat()
@@ -246,6 +355,7 @@ public class MasterLevel : MonoBehaviour
         if (isPaus) paus();
         SceneManager.LoadScene(0);
     }
+
 
     //kill
     public void Kill()
@@ -260,6 +370,7 @@ public class MasterLevel : MonoBehaviour
             end();
     }
 
+
     //визав мену END
     private void end()
     {
@@ -271,8 +382,57 @@ public class MasterLevel : MonoBehaviour
         Rec.text = ((int)((pleir.position.x - PC.StrtPosision.x) / 5)).ToString();
         mon.text = US.GetMoneu().ToString();
 
-        if(onlain)
-            MN.PostRequest(US.GetMoneu(), ((int)((pleir.position.x - PC.StrtPosision.x) / 5)));
+
+        float distans = ((int)((pleir.position.x - PC.StrtPosision.x) / 5));
+        if (resultat.Record < distans)
+            resultat.Record = distans;
+
+        if (onlain)
+            MN.PostRequest(US.GetMoneu(), distans, NFTVID);
     }
+
+
+    public void EnergiaPlus()
+    {
+        resultat.NFT[NFTVID].Energia++; 
+        resultat.Energia++;
+        MN.PostRequest(US.GetMoneu(), ((int)((pleir.position.x - PC.StrtPosision.x) / 5)), NFTVID,1);
+    }
+
+}
+
+
+
+[System.Serializable]
+class jsonGETPleir
+{
+    public float Money;
+    public float Record;
+    public int Energia;
+    public int EnergiaMax;
+    public bool nonitka;
+    public List<jsonGETNFT> NFT =new List<jsonGETNFT>();
+}
+
+[System.Serializable]
+class jsonGETNFT
+{
+    //public jsonGETNFT(int EnergiaI, int EnergiaMaxI, string NFTI)
+    //{ 
+    //    Energia = EnergiaI;
+    //    EnergiaMax = EnergiaMaxI;
+    //    NFT = NFTI;
+    //}
+
+
+    public int Energia;
+    public int EnergiaMax;
+    public string Nick;
+
+    public int skin;
+    public int suit;
+    public int trousers;
+    public int cap;
+    public int gloves;
 
 }

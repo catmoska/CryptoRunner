@@ -7,10 +7,12 @@ public class MoneuDellControlir : MonoBehaviour
     public bool nrig = true;
     private void Start()
     {
-        if (nrig && Random.Range(0, 5) == 0)
+        if (nrig && Random.Range(0, 2) == 0)
         {
             Animator an = GetComponent<Animator>();
-            an.SetBool("nerexod", true);
+            int i = Random.Range(0, 4);
+            Debug.Log(i);
+            an.SetInteger("nerexod", i);
         }
     }
 
@@ -26,14 +28,21 @@ public class MoneuDellControlir : MonoBehaviour
         BoxCollider2D f = GetComponent<BoxCollider2D>();
         f.enabled = false;
 
-        Destroy(gameObject,0.2f);
-        Vector3 dell = new Vector3(-20,15);
+        Destroy(gameObject, 0.2f);
+        Vector3 dell = new Vector3(-20, 15);
         float rastoi = 10;
         while (true)
         {
-            transform.position += dell/ rastoi;
+            transform.position += dell / rastoi;
             yield return new WaitForSeconds(0.02f);
         }
     }
 
+    private int Randik(int Max)
+    {
+        for (int i = 0; i < Max; i++)
+            if (Random.Range(0, 2) == 0)
+                return i;
+        return Max - 1;
+    }
 }

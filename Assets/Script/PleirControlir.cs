@@ -16,6 +16,7 @@ public class PleirControlir : MonoBehaviour
     [Header("Event")]
     public UnityEvent HitKill;
     public UnityEvent HitMoneuPlus;
+    public UnityEvent HitEnergiaPlus;
     public GeneratorLevel GL;
 
     //is triger
@@ -26,7 +27,7 @@ public class PleirControlir : MonoBehaviour
 
 
     // разное
-    public float visataMira=50;
+    public float visataMira = 50;
 
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -47,19 +48,26 @@ public class PleirControlir : MonoBehaviour
         if (isGraund != 0)
         {
             //StartCoroutine(antiJamp(3f,0.02f));
-            isGraund --;
+            isGraund--;
         }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         // проверка на столкновения с монетой
-        if (collision.gameObject.tag == "Moneu")
+        if (collision.gameObject.tag == "Moneu") 
         {
             MoneuDellControlir k = collision.gameObject.GetComponent<MoneuDellControlir>();
             k.start();
             HitMoneuPlus.Invoke();
-            Speed += SpeedX/20;
+            Speed += SpeedX / 20;
+        }
+        if (collision.gameObject.tag == "Energia")
+        {
+            MoneuDellControlir k = collision.gameObject.GetComponent<MoneuDellControlir>();
+            k.start();
+            HitEnergiaPlus.Invoke();
+            Speed += SpeedX;
         }
         else if (collision.gameObject.tag == "respavn")
         {
@@ -93,7 +101,7 @@ public class PleirControlir : MonoBehaviour
     {
         if (rb == null)
             rb = GetComponent<Rigidbody2D>();
-        isGraund =1;
+        isGraund = 1;
         Skin();
         transform.position = StrtPosision;
         Speed = SpeedStart;
@@ -102,7 +110,7 @@ public class PleirControlir : MonoBehaviour
     private void FixedUpdate()
     {
         //вечное двизения вперод
-        if(!MasterLevel.isPaus)
+        if (!MasterLevel.isPaus)
             transform.Translate(Vector2.right * Speed * Time.fixedDeltaTime);
 
         //амерть при проваливание
@@ -134,7 +142,7 @@ public class PleirControlir : MonoBehaviour
     {
         for (int i = 0; i < 20; i++)
         {
-            rb.AddForce(new Vector2(0, -gravitasion * Time.deltaTime*3), ForceMode2D.Impulse);
+            rb.AddForce(new Vector2(0, -gravitasion * Time.deltaTime * 3), ForceMode2D.Impulse);
             yield return new WaitForSeconds(0.02f);
         }
     }
@@ -150,18 +158,18 @@ public class PleirControlir : MonoBehaviour
         //испраления бага до его появления
         if (isGraund < 0)
             isGraund = 0;
-            //Debug.LogError("призок пошол по пи**е Eroor: PleirControlir ->yslov");
+        //Debug.LogError("призок пошол по пи**е Eroor: PleirControlir ->yslov");
     }
 
     //релизасия призка
     private void nrig()
     {
-        if (isLiana && ((Input.GetKey(KeyCode.Space)|| isJamp) && !MasterLevel.isPaus))
+        if (isLiana && ((Input.GetKey(KeyCode.Space) || isJamp) && !MasterLevel.isPaus))
         {
             KarankanaLIana();
-            rb.AddForce(new Vector2(0, Jamp * Time.deltaTime * (4f - transform.position.y/13)), ForceMode2D.Impulse);
+            rb.AddForce(new Vector2(0, Jamp * Time.deltaTime * (4f - transform.position.y / 13)), ForceMode2D.Impulse);
         }
-        else if ((Input.GetKeyDown(KeyCode.Space)|| isJamp) && (isGraund > 0 || isDubleJamp) && !MasterLevel.isPaus)
+        else if ((Input.GetKeyDown(KeyCode.Space) || isJamp) && (isGraund > 0 || isDubleJamp) && !MasterLevel.isPaus)
         {
             isJamp = false;
             rb.velocity *= 0f;
@@ -198,7 +206,7 @@ public class PleirControlir : MonoBehaviour
         isPaus = MasterLevel.isPaus;
     }
 
-    
+
     //аниматор///////////////////////////////////////
     private void Stoit()
     {
@@ -215,7 +223,7 @@ public class PleirControlir : MonoBehaviour
 
     }
 
-    
+
 
     private void KarankanaLIana()
     {
@@ -234,7 +242,18 @@ public class PleirControlir : MonoBehaviour
     {
         if (anSkin == null)
             return;
-        for(int i =0;i< neimSkin.Length; i++)
+        for (int i = 0; i < neimSkin.Length; i++)
             anSkin.SetInteger(neimSkin[i], NomerSkin[i]);
     }
 }
+
+
+
+
+
+
+
+
+
+
+

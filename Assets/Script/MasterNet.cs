@@ -9,14 +9,14 @@ public class MasterNet : MonoBehaviour
 
     //////////
     public void PostRequest(string json)
-    {StartCoroutine(PostRequestB(json));}
+    { StartCoroutine(PostRequestB(json)); }
 
     private IEnumerator PostRequestB(string jso)
     {
         string json = "";
-        for (int i =1;i<jso.Length-1;i++)
+        for (int i = 1; i < jso.Length - 1; i++)
             json += i;
-        
+
 
         WWWForm form = new WWWForm();
 
@@ -58,14 +58,16 @@ public class MasterNet : MonoBehaviour
 
 
     //////////////////
-    public void PostRequest(int Money, float Distansion)
-    {StartCoroutine(PostRequestB(Money,Distansion));}
+    public void PostRequest(int Money, float Distansion, int NFTVID,int Nonztia =0)
+    { StartCoroutine(PostRequestB(Money, Distansion, NFTVID, Nonztia)); }
 
-    private IEnumerator PostRequestB(int Money, float Distansion)
+    private IEnumerator PostRequestB(int Money, float Distansion, int NFTVID, int Nonztia)
     {
         WWWForm form = new WWWForm();
         form.AddField("Money", Money.ToString());
         form.AddField("Distansion", Distansion.ToString());
+        form.AddField("NFTVID", NFTVID.ToString());
+        form.AddField("Nonztia", Nonztia.ToString());
 
         UnityWebRequest www = UnityWebRequest.Post(url, form);
         yield return www.SendWebRequest();
@@ -81,7 +83,7 @@ public class MasterNet : MonoBehaviour
 
 
 
-    
+
 
     /////////////////////////////////
     private bool zanusk = false;
@@ -104,7 +106,7 @@ public class MasterNet : MonoBehaviour
         return "";
     }
 
-    
+
 
     IEnumerator GetRequestB()
     {

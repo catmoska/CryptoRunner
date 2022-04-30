@@ -11,6 +11,7 @@ public class UiStart : MonoBehaviour
     private bool onlain;
     private bool Zagruzka;
     public MasterLevel ML;
+    public GameObject canvosOsnovnoi;
 
     private void Start()
     {
@@ -31,6 +32,7 @@ public class UiStart : MonoBehaviour
         {
             HitStart.Invoke();
             menu.SetActive(false);
+            canvosOsnovnoi.SetActive(true);
         }
     }
 
