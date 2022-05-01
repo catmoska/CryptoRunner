@@ -87,8 +87,8 @@ public class PleirControlir : MonoBehaviour
         {
             isGraund--;
             isLiana = false;
-            StartCoroutine(antiJamp(5));
-            StartCoroutine(gravitasia());
+            StartCoroutine(antiJamp(5,0f));
+            //StartCoroutine(gravitasia());
         }
     }
 
@@ -133,7 +133,7 @@ public class PleirControlir : MonoBehaviour
         for (int i = 0; i < 20; i++)
         {
             rb.AddForce(new Vector2(0, (-Jamp / 3 * sila) / 20), ForceMode2D.Impulse);
-            yield return new WaitForSeconds(0.02f);
+            yield return new WaitForSeconds(0.01f);
         }
     }
 

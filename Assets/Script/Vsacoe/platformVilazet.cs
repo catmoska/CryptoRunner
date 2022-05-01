@@ -27,6 +27,10 @@ public class platformVilazet : MonoBehaviour
     void FixedUpdate()
     {
         if (transform.position.x - Pleir.position.x < triger)
+        {
             transform.position = Vector2.MoveTowards(transform.position, nanravlenia, speed * Time.fixedDeltaTime);
+            if(transform.position.x - Pleir.position.x < -triger)
+                Destroy(gameObject);
+        }
     }
 }

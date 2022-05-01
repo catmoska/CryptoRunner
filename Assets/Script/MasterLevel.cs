@@ -50,11 +50,14 @@ public class MasterLevel : MonoBehaviour
     [Header("spesl")]
     public GameObject Obusenia;
     public GameObject record;
+    public GameObject recordSena;
+    public GameObject testFPS;
     [Header("Menu")]
     public TextMeshProUGUI PleirMenuMoney;
     public TextMeshProUGUI PleirMenuEnergia;
     public TextMeshProUGUI NFTMenuNeim;
     public TextMeshProUGUI NFTMenuEnergia;
+    public TextMeshProUGUI timeObject;
     private jsonGETPleir resultat;
     public int NFTVID = 0;
 
@@ -69,7 +72,7 @@ public class MasterLevel : MonoBehaviour
     public void start()
     {
         recordTadlica();
-        if (resultat.nonitka)
+        if (onlain&&resultat.nonitka)
             StartCoroutine(strtObuseniaCoroutine());
     }
 
@@ -111,6 +114,8 @@ public class MasterLevel : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.E))
             reset();
+        if (Input.GetKeyDown(KeyCode.Q))
+            testFPS.SetActive(!testFPS.activeInHierarchy);
     }
 
 
@@ -142,8 +147,8 @@ public class MasterLevel : MonoBehaviour
 
         resultat = new jsonGETPleir();
 
-
-        string[] jsonOtvet = new string[5];
+        int elementov = 9;
+        string[] jsonOtvet = new string[elementov];
         int reset = 0;
         for(int i = 0; i < Otvet.Length; i++)
         {
@@ -171,7 +176,9 @@ public class MasterLevel : MonoBehaviour
         resultat.Energia = Convert.ToInt32(jsonOtvet[2]);
         resultat.EnergiaMax = Convert.ToInt32(jsonOtvet[3]);
         resultat.nonitka = Convert.ToBoolean(jsonOtvet[4]);
-        jsonOtvet = new string[8];
+
+        elementov = 9;
+        jsonOtvet = new string[elementov];
         int reset2 = 0;
         for (int i = reset;i < Otvet.Length; i++)
         {
@@ -190,9 +197,10 @@ public class MasterLevel : MonoBehaviour
                     NFT.trousers = Convert.ToInt32(jsonOtvet[5]);
                     NFT.cap = Convert.ToInt32(jsonOtvet[6]);
                     NFT.gloves = Convert.ToInt32(jsonOtvet[7]);
+                    NFT.time = Convert.ToInt32(jsonOtvet[8]);
 
                     resultat.NFT.Add(NFT);
-                    jsonOtvet = new string[8];
+                    jsonOtvet = new string[elementov];
                     reset2 = 0;
                     break;
                 default:
@@ -201,7 +209,6 @@ public class MasterLevel : MonoBehaviour
             }
         }
         UndeitMenu();
-        recordTadlica();
         Zagruzka = false;
     }
 
@@ -216,8 +223,8 @@ public class MasterLevel : MonoBehaviour
 
     private void recordTadlica()
     {
-        if(resultat.Record>10)
-            Instantiate(record, new Vector2(resultat.Record*3 + PC.StrtPosision.x, 10f), Quaternion.identity);
+        if(onlain&&resultat.Record>10)
+            recordSena = Instantiate(record, new Vector2((resultat.Record*5) + PC.StrtPosision.x, 10f), Quaternion.identity);
     }
 
 
@@ -238,12 +245,17 @@ public class MasterLevel : MonoBehaviour
         string EnergiaNFT = resultat.NFT[NFTVID].Energia.ToString();
         string EnergiaMaxNFT = resultat.NFT[NFTVID].EnergiaMax.ToString();
         string NickNFT = resultat.NFT[NFTVID].Nick.ToString();
+        string time = resultat.NFT[NFTVID].time.ToString();
 
         PleirMenuMoney.text = Money.ToString();
-        PleirMenuEnergia.text = EnergiaPleir.ToString() + "/" + EnergiaMaxPleir.ToString();
+        PleirMenuEnergia.text = EnergiaPleir + "/" + EnergiaMaxPleir;
 
         NFTMenuNeim.text = NickNFT;
-        NFTMenuEnergia.text = EnergiaNFT.ToString() + "/" + EnergiaMaxNFT.ToString();
+        NFTMenuEnergia.text = EnergiaNFT + "/" + EnergiaMaxNFT;
+
+        timeObject.text = time+"min";
+
+
 
         if (resultat.Energia <= 0)
             erorit("EroorEbergiaPleir", false);
@@ -261,6 +273,7 @@ public class MasterLevel : MonoBehaviour
             Zagruzka = false;
             TimeEroor = TimeEroorStart;
         }
+        //UndeitMenu();
         for (int i = 0; i < EroorVivod.Length; i++)
             EroorVivod[i].text = text;
     }
@@ -342,10 +355,13 @@ public class MasterLevel : MonoBehaviour
         US.moneuReset();
         HitStart.Invoke();
 
-        resultat.Energia--;
-        resultat.NFT[NFTVID].Energia--;
-        if (resultat.Energia <= 0 || resultat.NFT[NFTVID].Energia <= 0)
-            vozrat();
+        if (onlain)
+        {
+            resultat.Energia--;
+            resultat.NFT[NFTVID].Energia--;
+            if (resultat.Energia <= 0 || resultat.NFT[NFTVID].Energia <= 0)
+                vozrat();
+        }
     }
 
 
@@ -384,9 +400,13 @@ public class MasterLevel : MonoBehaviour
 
 
         float distans = ((int)((pleir.position.x - PC.StrtPosision.x) / 5));
-        if (resultat.Record < distans)
+        if (onlain &&resultat.Record < distans)
+        {
+            Destroy(recordSena);
             resultat.Record = distans;
+        }
 
+        Debug.Log("end: distans: " + distans.ToString());
         if (onlain)
             MN.PostRequest(US.GetMoneu(), distans, NFTVID);
     }
@@ -397,6 +417,32 @@ public class MasterLevel : MonoBehaviour
         resultat.NFT[NFTVID].Energia++; 
         resultat.Energia++;
         MN.PostRequest(US.GetMoneu(), ((int)((pleir.position.x - PC.StrtPosision.x) / 5)), NFTVID,1);
+    }
+
+
+    public int GetMoneuShare()
+    {
+        return US.GetMoneu();
+    }
+
+    public int GetDistansShare()
+    {
+        return ((int)((pleir.position.x - PC.StrtPosision.x) / 5));
+    }
+
+    public void zacrit(GameObject obgectss)
+    {
+        GameObject obgectsss = obgectss.transform.Find("Image").gameObject;
+        Animator an = obgectsss.GetComponent<Animator>();
+        if (an != null)
+            an.SetBool("stop", true);
+        StartCoroutine(zacritCur(obgectss));
+    }
+
+    public IEnumerator zacritCur(GameObject obgectss)
+    {
+        yield return new WaitForSeconds(0.15f);
+        obgectss.SetActive(false);
     }
 
 }
@@ -429,6 +475,7 @@ class jsonGETNFT
     public int EnergiaMax;
     public string Nick;
 
+    public int time;
     public int skin;
     public int suit;
     public int trousers;

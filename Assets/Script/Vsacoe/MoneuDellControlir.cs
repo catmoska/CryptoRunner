@@ -7,11 +7,10 @@ public class MoneuDellControlir : MonoBehaviour
     public bool nrig = true;
     private void Start()
     {
-        if (nrig && Random.Range(0, 2) == 0)
+        if (nrig && Random.Range(0, 3) == 0)
         {
             Animator an = GetComponent<Animator>();
-            int i = Random.Range(0, 4);
-            Debug.Log(i);
+            int i = Random.Range(1, 4);
             an.SetInteger("nerexod", i);
         }
     }

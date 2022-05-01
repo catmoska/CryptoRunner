@@ -32,7 +32,7 @@ public class GeneratorLevel : MonoBehaviour
     //nrodolzitolnast
     public int takt;
     public int taktKolibat;
-    private int vidi = 6;
+    private int vidi =6;
     private float timer;
     public float timerstart;
     private int notok;
@@ -100,9 +100,12 @@ public class GeneratorLevel : MonoBehaviour
                 case 5://генирратор головних кристалов
                     i = GENplatVisaco(i, kord);
                     break;
-                case 6://генирратор леани и 2 €руса
-                    i = GENplatformEtaz(i, kord);
+                case 6://генирратор копе
+                    i = GENCone(i, kord);
                     break;
+                //case 7://генирратор леани и 2 €руса
+                //    i = GENplatformEtaz(i, kord);
+                //    break;
                 default:
                     i = GENplatform(i, kord);
                     Debug.LogError("типа нет ето EROOR :GeneratorLevel -> generitKadar : " + u.ToString());
@@ -180,7 +183,7 @@ public class GeneratorLevel : MonoBehaviour
     private int Randik(int Max)
     {
         for (int i = 0; i < Max; i++)
-            if (Random.Range(0, 2) == 0)
+            if (Random.Range(0, 3) == 0)
                 return i;
         return Max - 1;
     }
@@ -419,6 +422,16 @@ public class GeneratorLevel : MonoBehaviour
         for (int g = 0; g < 3; g++)
             i = GENplatform(i, kord, false);
 
+        return i;
+    }
+
+
+    private Vector2Int ran_GENCone = new Vector2Int(1, 3);
+    private int GENCone(int i, Vector2 kord)
+    {
+        float rand = Random.Range(ran_GENCone.x, ran_GENCone.y) * Dolg;
+        i = GENplatform(i, kord);
+        Dell.Add(Instantiate(PrepstaClon[4], new Vector2(kord.x + i * Dolg, kord.y + rand+0.5f),Quaternion.identity));
         return i;
     }
 }
