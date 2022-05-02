@@ -5,6 +5,10 @@ using UnityEngine;
 public class MoneuDellControlir : MonoBehaviour
 {
     public bool nrig = true;
+    public Transform mobeuZob;
+    private float speed = 200;
+    private static string neimtegNOisk = "Player";
+    //private static string neimtegNOisk = "MoneuUi";
     private void Start()
     {
         if (nrig && Random.Range(0, 3) == 0)
@@ -13,6 +17,10 @@ public class MoneuDellControlir : MonoBehaviour
             int i = Random.Range(1, 4);
             an.SetInteger("nerexod", i);
         }
+
+        if (mobeuZob == null)
+            mobeuZob = GameObject.FindGameObjectsWithTag(neimtegNOisk)[0].GetComponent<Transform>();
+        
     }
 
     public void start()
@@ -27,12 +35,16 @@ public class MoneuDellControlir : MonoBehaviour
         BoxCollider2D f = GetComponent<BoxCollider2D>();
         f.enabled = false;
 
+        if (mobeuZob == null)
+            mobeuZob = GameObject.FindGameObjectsWithTag(neimtegNOisk)[0].GetComponent<Transform>();
+        
+
         Destroy(gameObject, 0.2f);
-        Vector3 dell = new Vector3(-20, 15);
-        float rastoi = 10;
+        //Vector3 dell = new Vector3(-20, 15);
+        //float rastoi = 10;
         while (true)
         {
-            transform.position += dell / rastoi;
+            transform.position = Vector2.MoveTowards(transform.position, mobeuZob.position, speed * Time.fixedDeltaTime); ;
             yield return new WaitForSeconds(0.02f);
         }
     }

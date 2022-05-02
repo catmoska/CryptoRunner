@@ -1,0 +1,97 @@
+<!DOCTYPE html> {% load static %}
+<html lang="en-us">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Unity WebGL Player | CryptoRunner</title>
+    <script src="https://cdn.jsdelivr.net/sharer.js/latest/sharer.min.js"></script>
+    <script>
+      
+    function textMesends(moneu,distansion)
+      {
+        return "fff"+moneu+" "+distansion;
+      }
+
+      mergeInto(LibraryManager.library, {
+
+          ShareFuncsiaTelegram : function (moneu,distansion) {
+              window.open('https://telegram.me/share/url?url='+textMesends(moneu,distansion),'sharer','status=0,toolbar=0,width=650,height=500');
+          },
+          ShareFuncsiaFacebook : function (moneu,distansion) {
+              window.open('https://www.facebook.com/sharer.php?u='+textMesends(moneu,distansion),'sharer','status=0,toolbar=0,width=650,height=500');
+          },
+          ShareFuncsiaTwitter : function (moneu,distansion) {
+              window.open('https://twitter.com/intent/tweet?text='+textMesends(moneu,distansion),'sharer','status=0,toolbar=0,width=650,height=500');
+          },
+          registor : function (moneu,distansion) {
+              conect();
+          },
+      });
+
+        
+        async function conect() {
+            const url = "{% url 'geim'%}"
+            try {
+                const resp = await window.solana.connect();
+                p = resp.publicKey.toString();
+                // console.log(p);
+                await getData('POST', url, {
+                    'id': p
+                });
+                window.location.href = "{% url 'geim'%}";
+            } catch (err) {
+                window.open("https://phantom.app/", "_blank");
+            }
+        }
+
+        async function getData(method, url, body = null) {
+            return new Promise((resolve, reject) => {
+                const xhr = new XMLHttpRequest()
+                
+                xhr.open(method, url)
+
+                xhr.responseType = 'json'
+                xhr.setRequestHeader('Content-Type', 'application/json')
+
+                xhr.onload = () => {
+                    if (xhr.status >= 400)
+                        reject(xhr.response)
+                    else
+                        resolve(xhr.response)
+                }
+                xhr.onerror = () => {
+                    reject(xhr.response)
+                }
+
+                xhr.send(JSON.stringify(body))
+            })
+        }
+</script>
+</head>
+
+<body style="text-align: center">
+
+    <canvas id="unity-canvas" width=960 height=600 style="width: 960px; height: 600px; background: #231F20"></canvas>
+    <script src="{% static 'Build/ttt.loader.js' %}"></script>
+    <script>
+        if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+            var meta = document.createElement('meta');
+            meta.name = 'viewport';
+            meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+            document.getElementsByTagName('head')[0].appendChild(meta);
+        }
+
+        createUnityInstance(document.querySelector("#unity-canvas"), {
+            dataUrl: "{% static 'Build/ttt.data.br'%}",
+            frameworkUrl: "{% static 'Build/ttt.framework.js.br'%}",
+            codeUrl: "{% static 'Build/ttt.wasm.br'%}",
+            streamingAssetsUrl: "StreamingAssets",
+            companyName: "GJstudio",
+            productName: "CryptoRunner",
+            productVersion: "0,1",
+        });
+    </script>
+</body>
+
+</html>

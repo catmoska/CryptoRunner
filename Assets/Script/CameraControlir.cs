@@ -11,11 +11,8 @@ public class CameraControlir : MonoBehaviour
     private void Start()
     {
         if (Pleir == null)
-        {
-            GameObject[] gos;
-            gos = GameObject.FindGameObjectsWithTag("Player");
-            Pleir = gos[0].GetComponent<Transform>();
-        }
+            Pleir = GameObject.FindGameObjectsWithTag("Player")[0].GetComponent<Transform>();
+        
     }
 
     //двигает камеру

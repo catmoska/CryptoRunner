@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Runtime.InteropServices;
+using System.Collections;
 
 public class ShareScreenScript : MonoBehaviour {
 
@@ -9,6 +10,8 @@ public class ShareScreenScript : MonoBehaviour {
     private static extern void ShareFuncsiaFacebook(int moneu, int distansion);
     [DllImport("__Internal")]
     private static extern void ShareFuncsiaTwitter(int moneu, int distansion);
+    [DllImport("__Internal")]
+    private static extern void registor();
 
     private int moneu;
     private int distansion;
@@ -16,7 +19,7 @@ public class ShareScreenScript : MonoBehaviour {
 
     private void Start()
     {
-        ML = GetComponent<MasterLevel>();
+        ML = MasterLevel.singleton;
     }
 
     private void dani()
@@ -41,5 +44,16 @@ public class ShareScreenScript : MonoBehaviour {
     {
         dani();
         ShareFuncsiaTwitter(moneu, distansion);
+    }
+
+    public void registorAc()
+    {
+        registor();
+    }
+
+    public IEnumerator barerc()
+    {
+        yield return new WaitForSeconds(1);
+        ML.vozrat();
     }
 }

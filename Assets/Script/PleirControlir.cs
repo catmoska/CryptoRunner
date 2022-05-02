@@ -4,6 +4,9 @@ using UnityEngine.Events;
 
 public class PleirControlir : MonoBehaviour
 {
+    public static PleirControlir singleton { get; private set; }
+    public static GameObject singletonGameObject { get; private set; }
+
     [Header("Moving")]
     public float SpeedStart;
     public float Speed;
@@ -92,13 +95,23 @@ public class PleirControlir : MonoBehaviour
         }
     }
 
+    private void Awake()
+    {
+        singleton = this;
+        singletonGameObject = gameObject;
+    }
+
     private void Start()
     {
+        singleton = this;
+        singletonGameObject = gameObject;
         start();
     }
 
     public void start()
     {
+        singleton = this;
+        singletonGameObject = gameObject;
         if (rb == null)
             rb = GetComponent<Rigidbody2D>();
         isGraund = 1;

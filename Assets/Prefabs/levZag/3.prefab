@@ -14,7 +14,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &614450322073755090
 Transform:
@@ -26,6 +26,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8156093313177054231}
   - {fileID: 2338438104937313874}
@@ -42,6 +43,10 @@ PrefabInstance:
     - target: {fileID: 1075912879883011219, guid: d77b2ce3350c916408ede6e15d80df61, type: 3}
       propertyPath: m_Name
       value: skull_new_2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1075912879883011219, guid: d77b2ce3350c916408ede6e15d80df61, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 1075912879883011221, guid: d77b2ce3350c916408ede6e15d80df61, type: 3}
       propertyPath: m_RootOrder
@@ -116,6 +121,10 @@ PrefabInstance:
     - target: {fileID: 2434055184545399555, guid: e5cdececc96dc084f87b9a41bfe33869, type: 3}
       propertyPath: m_Name
       value: collect_3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2434055184545399555, guid: e5cdececc96dc084f87b9a41bfe33869, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 2434055184545399613, guid: e5cdececc96dc084f87b9a41bfe33869, type: 3}
       propertyPath: m_RootOrder

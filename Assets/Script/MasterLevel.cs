@@ -10,6 +10,9 @@ using UnityEngine.SceneManagement;
 
 public class MasterLevel : MonoBehaviour
 {
+    public static MasterLevel singleton { get; private set; }
+
+
     [Header("paus")]
     public GameObject SetingsObject;
     public GameObject PausObject;
@@ -50,8 +53,8 @@ public class MasterLevel : MonoBehaviour
     [Header("spesl")]
     public GameObject Obusenia;
     public GameObject record;
-    public GameObject recordSena;
     public GameObject testFPS;
+    public GameObject registor;
     [Header("Menu")]
     public TextMeshProUGUI PleirMenuMoney;
     public TextMeshProUGUI PleirMenuEnergia;
@@ -71,6 +74,7 @@ public class MasterLevel : MonoBehaviour
 
     public void start()
     {
+        singleton = this;
         recordTadlica();
         if (onlain&&resultat.nonitka)
             StartCoroutine(strtObuseniaCoroutine());
@@ -78,6 +82,7 @@ public class MasterLevel : MonoBehaviour
 
     private void Awake()
     {
+        singleton = this;
         if (onlain)
             MN.GetRequest();
     }
@@ -130,7 +135,13 @@ public class MasterLevel : MonoBehaviour
             case "EroorNet":
                 erorit("EroorNet");
                 return;
+            case "registr":
+                registor.SetActive(true);
+                Zagruzka = false;
+                PleiBloc = false;
+                return;
             default:
+                Destroy(registor);
                 erorit("", false);
                 Zagruzka = false;
                 PleiBloc = false;
@@ -223,8 +234,8 @@ public class MasterLevel : MonoBehaviour
 
     private void recordTadlica()
     {
-        if(onlain&&resultat.Record>10)
-            recordSena = Instantiate(record, new Vector2((resultat.Record*5) + PC.StrtPosision.x, 10f), Quaternion.identity);
+        if (onlain && resultat.Record > 10)
+            record.transform.position = new Vector2((resultat.Record * 5) + PC.StrtPosision.x, 10f);
     }
 
 
@@ -400,11 +411,9 @@ public class MasterLevel : MonoBehaviour
 
 
         float distans = ((int)((pleir.position.x - PC.StrtPosision.x) / 5));
-        if (onlain &&resultat.Record < distans)
-        {
-            Destroy(recordSena);
+        if (onlain)
             resultat.Record = distans;
-        }
+        
 
         Debug.Log("end: distans: " + distans.ToString());
         if (onlain)
@@ -428,6 +437,11 @@ public class MasterLevel : MonoBehaviour
     public int GetDistansShare()
     {
         return ((int)((pleir.position.x - PC.StrtPosision.x) / 5));
+    }
+
+    public bool GetisPaus()
+    {
+        return isPaus;
     }
 
     public void zacrit(GameObject obgectss)

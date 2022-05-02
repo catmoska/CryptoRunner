@@ -16,7 +16,7 @@ GameObject:
   m_TagString: Kill
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1828438526384295947
 Transform:
@@ -74,7 +74,7 @@ SpriteRenderer:
   m_SortingLayerID: -1695616975
   m_SortingLayer: 1
   m_SortingOrder: 2
-  m_Sprite: {fileID: 21300000, guid: e666359535d6c3e478b6b5b768d73631, type: 3}
+  m_Sprite: {fileID: 83339393, guid: d2bce05cbb4a62143a1c08eb3379106c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -102,12 +102,12 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 5.12, y: 2.56}
+    oldSize: {x: 4.15, y: 2.73}
     newSize: {x: 5.12, y: 2.56}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2.37, y: 1.88}
+  m_Size: {x: 3.11, y: 1.88}
   m_EdgeRadius: 0

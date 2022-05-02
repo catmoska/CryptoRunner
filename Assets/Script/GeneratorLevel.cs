@@ -9,7 +9,6 @@ public class GeneratorLevel : MonoBehaviour
     public float Dolg;
     public List<GameObject> PlatformLeft;
     public List<GameObject> Platform;
-    public List<GameObject> PlatformDuble;
     public List<GameObject> PlatformRight;
     public List<GameObject> Prepsta;
     public List<int> PrepstaDovz;
@@ -32,7 +31,7 @@ public class GeneratorLevel : MonoBehaviour
     //nrodolzitolnast
     public int takt;
     public int taktKolibat;
-    private int vidi =6;
+    private int vidi =5;
     private float timer;
     public float timerstart;
     private int notok;
@@ -85,22 +84,19 @@ public class GeneratorLevel : MonoBehaviour
                 case 0: //генирратор платформ
                     i = GENplatform(i, kord);
                     break;
-                case 1: //генирратор двоиних платформ
-                    i = GENplatformDuble(i, kord);
-                    break;
-                case 2:  //генирратор префабов вибраних
+                case 1:  //генирратор префабов вибраних
                     i = GENprefabc(i, kord);
                     break;
-                case 3://генирратор платформ вес€сих в воздухе
+                case 2://генирратор платформ вес€сих в воздухе
                     i = GENnlatformSip(i, kord);
                     break;
-                case 4://генирратор  платформ с низу
+                case 3://генирратор  платформ с низу
                     i = GENplatformNoava(i, kord);
                     break;
-                case 5://генирратор головних кристалов
+                case 4://генирратор головних кристалов
                     i = GENplatVisaco(i, kord);
                     break;
-                case 6://генирратор копе
+                case 5://генирратор копе
                     i = GENCone(i, kord);
                     break;
                 //case 7://генирратор леани и 2 €руса
@@ -183,7 +179,7 @@ public class GeneratorLevel : MonoBehaviour
     private int Randik(int Max)
     {
         for (int i = 0; i < Max; i++)
-            if (Random.Range(0, 3) == 0)
+            if (Random.Range(0, 2) == 0)
                 return i;
         return Max - 1;
     }
@@ -235,15 +231,6 @@ public class GeneratorLevel : MonoBehaviour
             GENmoneu(i, kord, uron);
         Dell.Add(Instantiate(Platform[Random.Range(0, 2) + biom * 2], new Vector2(kord.x + i * Dolg, kord.y), Zerkal()));
         i++;
-        return i;
-    }
-
-    //генирратор двоиних платформ
-    private int GENplatformDuble(int i, Vector2 kord)
-    {
-        GENmoneu(i, kord);
-        Dell.Add(Instantiate(PlatformDuble[Random.Range(0, 1) + biom * 2], new Vector2(kord.x + i * Dolg, kord.y), Quaternion.identity));
-        i += 2;
         return i;
     }
 
@@ -355,6 +342,7 @@ public class GeneratorLevel : MonoBehaviour
     private Vector2 smesenia2_GENplatVisaco = new Vector2(0, 4);
     private Vector2 smesenia3_GENplatVisaco = new Vector2(0, 6);
     private Vector2Int ranNar_GENplatVisaco = new Vector2Int(3, 5);
+    private int iStop_GENplatVisaco;
     private int GENplatVisaco(int i, Vector2 kord)
     {
         int rand = Random.Range(ranNar_GENplatVisaco.x, ranNar_GENplatVisaco.y);
@@ -367,9 +355,9 @@ public class GeneratorLevel : MonoBehaviour
 
         for (int g = 0; g < rand; g++)
         {
-            if (((rand+1) / 2) == g)
+            if ((((float)rand+1) / 2f) == g)
                 GENprefabcClon(i, kord + smesenia_GENplatVisaco+new Vector2(0,1),3);
-            i = GENplatform(i, kord, true, false);
+            i = GENplatform(i, kord, false, false);
             GENplatform(i, kord + smesenia_GENplatVisaco, false);
             GENprefabcClon(i, kord + smesenia2_GENplatVisaco, Random.Range(1, 3), new Quaternion(180, 0, 0, 0));
         }
@@ -380,6 +368,7 @@ public class GeneratorLevel : MonoBehaviour
         for (int g = 0; g < 3; g++)
             i = GENplatform(i, kord, false);
 
+        iStop_GENplatVisaco = i;
         return i;
     }
 
@@ -407,7 +396,7 @@ public class GeneratorLevel : MonoBehaviour
             obg.AddComponent<platformVilazet>();
             platformVilazet obg2 = obg.GetComponent<platformVilazet>();
             obg2.raznia = raznia;
-            i += Randik(3) + 1;
+            i += Randik(Random.Range(0, 4)) + 2;
         }
         Dell.Add(Instantiate(PlatformRight[Random.Range(0, 2) + biom * 2], new Vector2(kord.x + i * Dolg, kord.y) + smesenia_GENnlatformSip, Quaternion.identity)); i++;
 
@@ -426,9 +415,12 @@ public class GeneratorLevel : MonoBehaviour
     }
 
 
+    private int otstup_GENCone=25;
     private Vector2Int ran_GENCone = new Vector2Int(1, 3);
     private int GENCone(int i, Vector2 kord)
     {
+        if (iStop_GENplatVisaco + i < otstup_GENCone) return i;
+
         float rand = Random.Range(ran_GENCone.x, ran_GENCone.y) * Dolg;
         i = GENplatform(i, kord);
         Dell.Add(Instantiate(PrepstaClon[4], new Vector2(kord.x + i * Dolg, kord.y + rand+0.5f),Quaternion.identity));
