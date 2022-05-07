@@ -29,9 +29,14 @@ public class PleirControlir : MonoBehaviour
     private bool isJamp;
 
 
+
     // разное
     public float visataMira = 50;
 
+
+    [Header("Music")]
+    public AudioSource JampMusic;
+    public AudioSource MoneuMusic;
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -64,6 +69,7 @@ public class PleirControlir : MonoBehaviour
             k.start();
             HitMoneuPlus.Invoke();
             Speed += SpeedX / 20;
+            MoneuMusic.Play();
         }
         if (collision.gameObject.tag == "Energia")
         {
@@ -71,6 +77,7 @@ public class PleirControlir : MonoBehaviour
             k.start();
             HitEnergiaPlus.Invoke();
             Speed += SpeedX;
+            //MoneuMusic.Play();
         }
         else if (collision.gameObject.tag == "respavn")
         {
@@ -184,6 +191,7 @@ public class PleirControlir : MonoBehaviour
         }
         else if ((Input.GetKeyDown(KeyCode.Space) || isJamp) && (isGraund > 0 || isDubleJamp) && !MasterLevel.isPaus)
         {
+            JampMusic.Play();
             isJamp = false;
             rb.velocity *= 0f;
             if (isGraund == 0) isDubleJamp = false;
