@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class anuimationOntimizzeit : MonoBehaviour
+public class anuimationOntimizzeit : RunMonoBehaviour
 {
     private Transform Pleir;
     private float triger = 26;
@@ -11,13 +11,20 @@ public class anuimationOntimizzeit : MonoBehaviour
 
     void Start()
     {
+        updeitMeneger.singleton.RMB.Add(this);
         if (Pleir == null)
             Pleir = PleirControlir.singletonGameObject.transform;
         if(an == null)
             an = GetComponent<Animator>();
+
+        if (active && !(transform.position.x - Pleir.position.x < triger))
+        {
+            an.enabled = false;
+            active = false;
+        }
     }
 
-    void FixedUpdate()
+    public override bool Run()
     {
         if (Pleir == null)
             Pleir = PleirControlir.singletonGameObject.transform;
@@ -26,8 +33,10 @@ public class anuimationOntimizzeit : MonoBehaviour
             an = GetComponent<Animator>();
             if (an == null)
             {
+                Destroy(this);
                 gameObject.GetComponent<anuimationOntimizzeit>().enabled = false;
-                return;
+                Debug.Log("ddddd");
+                return true;
             }
         }
 
@@ -41,6 +50,7 @@ public class anuimationOntimizzeit : MonoBehaviour
 
             if (transform.position.x - Pleir.position.x < -triger)
                 Destroy(gameObject);
+            return true;
         }
         else
         {
@@ -50,5 +60,7 @@ public class anuimationOntimizzeit : MonoBehaviour
                 active = false;
             }
         }
+
+        return false;
     }
 }

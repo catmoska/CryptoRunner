@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class platformVilazet : MonoBehaviour
+public class platformVilazet : RunMonoBehaviour
 {
     private Transform Pleir;
     public MasterLevel ML;
@@ -12,6 +12,7 @@ public class platformVilazet : MonoBehaviour
 
     void Start()
     {
+        updeitMeneger.singleton.RMB.Add(this);
         if (Pleir == null)
             Pleir = PleirControlir.singletonGameObject.transform;
         if (ML == null)
@@ -25,7 +26,7 @@ public class platformVilazet : MonoBehaviour
             transform.position += smesenia + new Vector3(Random.Range(-0.2f, 0.2f), Random.Range(-2f, 2f));
     }
 
-    void FixedUpdate()
+    public override bool Run()
     {
         if (Pleir == null)
             Pleir = PleirControlir.singletonGameObject.transform;
@@ -33,14 +34,12 @@ public class platformVilazet : MonoBehaviour
         if (ML == null)
             ML = MasterLevel.singleton;
 
-        //Debug.Log(ML.GetisPaus());
-        //Debug.Log(Pleir.position.x);
-
         if (!ML.GetisPaus() && transform.position.x - Pleir.position.x < triger)
         {
             transform.position = Vector2.MoveTowards(transform.position, nanravlenia, speed * Time.fixedDeltaTime);
             if (transform.position.x - Pleir.position.x < -triger)
                 Destroy(gameObject);
         }
+        return true;
     }
 }

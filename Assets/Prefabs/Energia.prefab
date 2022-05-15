@@ -9,13 +9,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8521102075043730779}
-  - component: {fileID: -4254487536231024410}
   m_Layer: 0
   m_Name: Energia
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &8521102075043730779
 Transform:
@@ -33,21 +32,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-4254487536231024410
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5114689432109165331}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 53aeee8180bd5e54e9e4c7674ea77f72, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  triger: 15
-  speed: 7
-  raznia: 0
 --- !u!1 &7261345582124185895
 GameObject:
   m_ObjectHideFlags: 0
@@ -61,12 +45,13 @@ GameObject:
   - component: {fileID: 7261345582124185893}
   - component: {fileID: 7261345582124185892}
   - component: {fileID: 6202339395679405999}
+  - component: {fileID: 871506270572922737}
   m_Layer: 0
   m_Name: 2
   m_TagString: Energia
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &7261345582124185891
 Transform:
@@ -194,3 +179,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nrig: 0
+  mobeuZob: {fileID: 0}
+--- !u!114 &871506270572922737
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7261345582124185895}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53aeee8180bd5e54e9e4c7674ea77f72, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  raznia: 0

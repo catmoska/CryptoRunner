@@ -813,6 +813,11 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!212 &224232309 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 8519988935899303576, guid: d5611afab1b537d4a8426908cd3afcd4, type: 3}
+  m_PrefabInstance: {fileID: 8519988935992553664}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &230686559
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8276,6 +8281,7 @@ GameObject:
   - component: {fileID: 1827687458}
   - component: {fileID: 1827687459}
   - component: {fileID: 1827687460}
+  - component: {fileID: 1827687461}
   m_Layer: 0
   m_Name: Script
   m_TagString: script
@@ -8408,7 +8414,7 @@ MonoBehaviour:
   - {fileID: 5546545223336308057, guid: 8f5adeb74b03fa046b1b2b5b4f7c6f9b, type: 2}
   distansia: {fileID: 1216531834}
   US: {fileID: 1827687457}
-  besmert: 0
+  besmert: 1
   pleir: {fileID: 1464235266}
   EndObject: {fileID: 309859612}
   PunktObject: {fileID: 175089390}
@@ -8454,12 +8460,29 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1827687461}
+        m_TargetAssemblyTypeName: updeitMeneger, Assembly-CSharp
+        m_MethodName: start
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   PC: {fileID: 1735007587}
   onlain: 0
   EroorVivod:
   - {fileID: 1101247877}
   - {fileID: 1897181982}
   TimeEroorStart: 5
+  pleirRender: {fileID: 224232309}
+  pleirRender2: {fileID: 1272044587598037615}
+  PleirSprite:
+  - {fileID: 1646524060, guid: bd835a1842f4fab4aa13ace0781fd4c8, type: 3}
+  - {fileID: -1909221214, guid: bd835a1842f4fab4aa13ace0781fd4c8, type: 3}
   Obusenia: {fileID: 993115751}
   record: {fileID: 1302572238}
   testFPS: {fileID: 597789572}
@@ -8553,6 +8576,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd1cb186a05944d4a886344a5ebe30b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ML: {fileID: 0}
+--- !u!114 &1827687461
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1827687453}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe6a4d50bff5b51419ddb654d64bdc59, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RMB: []
+  sislaSmena: 0
   ML: {fileID: 0}
 --- !u!1 &1838311538 stripped
 GameObject:
@@ -9779,7 +9817,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 1646524060, guid: bd835a1842f4fab4aa13ace0781fd4c8, type: 3}
+  m_Sprite: {fileID: 0}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -10083,6 +10121,22 @@ PrefabInstance:
     - target: {fileID: 8519988935175062981, guid: d5611afab1b537d4a8426908cd3afcd4, type: 3}
       propertyPath: HitEnergiaPlus.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 8519988935899303576, guid: d5611afab1b537d4a8426908cd3afcd4, type: 3}
+      propertyPath: m_Size.x
+      value: 20.48
+      objectReference: {fileID: 0}
+    - target: {fileID: 8519988935899303576, guid: d5611afab1b537d4a8426908cd3afcd4, type: 3}
+      propertyPath: m_Size.y
+      value: 10.24
+      objectReference: {fileID: 0}
+    - target: {fileID: 8519988935899303576, guid: d5611afab1b537d4a8426908cd3afcd4, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 1646524060, guid: bd835a1842f4fab4aa13ace0781fd4c8, type: 3}
+    - target: {fileID: 8519988935899303576, guid: d5611afab1b537d4a8426908cd3afcd4, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d5611afab1b537d4a8426908cd3afcd4, type: 3}

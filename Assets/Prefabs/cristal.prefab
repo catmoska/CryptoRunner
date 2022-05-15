@@ -11,12 +11,13 @@ GameObject:
   - component: {fileID: 3104818472211608036}
   - component: {fileID: 8453490986014695942}
   - component: {fileID: 3104818472211608039}
+  - component: {fileID: 2360006297630535141}
   m_Layer: 0
   m_Name: cristal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &3104818472211608036
 Transform:
@@ -105,6 +106,19 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &2360006297630535141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2291764306098445094}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53aeee8180bd5e54e9e4c7674ea77f72, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  raznia: 0
 --- !u!1 &5436065527520863802
 GameObject:
   m_ObjectHideFlags: 0
@@ -119,7 +133,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &5436065527520863781
 Transform:
