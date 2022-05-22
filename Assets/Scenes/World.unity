@@ -123,6 +123,134 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &75190366
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 75190368}
+  - component: {fileID: 75190367}
+  m_Layer: 0
+  m_Name: vribrasia
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!82 &75190367
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 75190366}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 0d7bb933bbd03b34b9de2e3e76af54f6, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 0.7
+  m_Pitch: 1.2
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!4 &75190368
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 75190366}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1591095280}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &122089256
 GameObject:
   m_ObjectHideFlags: 0
@@ -1122,8 +1250,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 4.1613, y: 4.8548}
-  m_SizeDelta: {x: 141.6775, y: 140.2904}
+  m_AnchoredPosition: {x: 0.0000453, y: 0.000063896}
+  m_SizeDelta: {x: 150, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &281349714
 MonoBehaviour:
@@ -1145,7 +1273,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -1476506167, guid: d2bce05cbb4a62143a1c08eb3379106c, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a13d484535fd36046b5f8420a5df4dc1, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2444,7 +2572,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8061033117253153409, guid: e70e5b8913890e546a45bbba6450c49a, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8061033117253153409, guid: e70e5b8913890e546a45bbba6450c49a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4244,7 +4372,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &903408052
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4893,8 +5021,16 @@ PrefabInstance:
       value: 0.0000076293945
       objectReference: {fileID: 0}
     - target: {fileID: 8986778078849804520, guid: 59f1ce32ecdd8c649bf59285efe7e527, type: 3}
+      propertyPath: m_Interactable
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8986778078849804520, guid: 59f1ce32ecdd8c649bf59285efe7e527, type: 3}
+      propertyPath: m_Navigation.m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8986778078849804520, guid: 59f1ce32ecdd8c649bf59285efe7e527, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8986778078849804520, guid: 59f1ce32ecdd8c649bf59285efe7e527, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
@@ -7376,6 +7512,7 @@ Transform:
   m_Children:
   - {fileID: 563656145}
   - {fileID: 1027080777}
+  - {fileID: 75190368}
   - {fileID: 1385190531}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -8404,7 +8541,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SetingsObject: {fileID: 280011791}
   PausObject: {fileID: 915553114}
-  menu: {fileID: 2036535019}
+  pausMenu: {fileID: 2036535019}
   PPV: {fileID: 1591095284}
   mus: {fileID: 8986778077769601614}
   am: {fileID: 24100000, guid: 8f5adeb74b03fa046b1b2b5b4f7c6f9b, type: 2}
@@ -8414,7 +8551,6 @@ MonoBehaviour:
   - {fileID: 5546545223336308057, guid: 8f5adeb74b03fa046b1b2b5b4f7c6f9b, type: 2}
   distansia: {fileID: 1216531834}
   US: {fileID: 1827687457}
-  besmert: 1
   pleir: {fileID: 1464235266}
   EndObject: {fileID: 309859612}
   PunktObject: {fileID: 175089390}
@@ -8473,7 +8609,6 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   PC: {fileID: 1735007587}
-  onlain: 0
   EroorVivod:
   - {fileID: 1101247877}
   - {fileID: 1897181982}
@@ -8487,12 +8622,17 @@ MonoBehaviour:
   record: {fileID: 1302572238}
   testFPS: {fileID: 597789572}
   registor: {fileID: 478879441}
+  HomeMenu: {fileID: 0}
   PleirMenuMoney: {fileID: 733956020}
   PleirMenuEnergia: {fileID: 2055156392}
   NFTMenuNeim: {fileID: 425883500}
   NFTMenuEnergia: {fileID: 1727019991}
   timeObject: {fileID: 304933976}
   NFTVID: 0
+  timeSmertStart: 0.3
+  onlain: 1
+  besmert: 0
+  testPlei: 0
 --- !u!114 &1827687457
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8564,6 +8704,8 @@ MonoBehaviour:
   autaStart: 0
   ML: {fileID: 1827687456}
   canvosOsnovnoi: {fileID: 161373300}
+  audioVreibrasia: {fileID: 75190367}
+  energia: {fileID: 2115832605}
 --- !u!114 &1827687460
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9396,7 +9538,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1994374802}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1827687456}
+        m_TargetAssemblyTypeName: MasterLevel, Assembly-CSharp
+        m_MethodName: resetNFT
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1994374802
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9692,6 +9846,7 @@ GameObject:
   - component: {fileID: 2115832602}
   - component: {fileID: 2115832604}
   - component: {fileID: 2115832603}
+  - component: {fileID: 2115832605}
   m_Layer: 5
   m_Name: energia
   m_TagString: Untagged
@@ -9759,6 +9914,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2115832601}
   m_CullTransparentMesh: 1
+--- !u!95 &2115832605
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2115832601}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e6d4dfb9f6a8c1e41a2ca0cc3eb66aa4, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1272044587598037613
 GameObject:
   m_ObjectHideFlags: 0
@@ -9817,7 +9992,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 1646524060, guid: bd835a1842f4fab4aa13ace0781fd4c8, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

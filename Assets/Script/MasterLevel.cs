@@ -17,7 +17,7 @@ public class MasterLevel : MonoBehaviour
     [Header("paus")]
     public GameObject SetingsObject;
     public GameObject PausObject;
-    public Animator menu;
+    public Animator pausMenu;
     public static bool isPaus = false;//MasterLevel.isPaus
     public PostProcessVolume PPV;
 
@@ -30,7 +30,6 @@ public class MasterLevel : MonoBehaviour
     [Header("Life")]
     public TextMeshProUGUI distansia;
     public UiSpisac US;
-    public bool besmert;
     public Transform pleir;
 
     [Header("END")]
@@ -43,7 +42,7 @@ public class MasterLevel : MonoBehaviour
 
     [Header("PleirSposobnasti")]
     public PleirControlir PC;
-    public bool onlain;
+    
     private bool Zagruzka = true;
     private bool PleiBloc = false;
     public TextMeshProUGUI[] EroorVivod;
@@ -61,6 +60,7 @@ public class MasterLevel : MonoBehaviour
     public GameObject testFPS;
     public GameObject registor;
     [Header("Menu")]
+    public GameObject HomeMenu;
     public TextMeshProUGUI PleirMenuMoney;
     public TextMeshProUGUI PleirMenuEnergia;
     public TextMeshProUGUI NFTMenuNeim;
@@ -70,7 +70,14 @@ public class MasterLevel : MonoBehaviour
     public int NFTVID = 0;
 
     private bool isEnd = false;
+    [Header("kill")]
+    public float timeSmertStart;
+    private float timeSmert;
 
+    [Header("BOOL")]
+    public bool onlain;
+    public bool besmert;
+    public bool testPlei;
 
 
     private void renderPleir(int znas)
@@ -83,6 +90,10 @@ public class MasterLevel : MonoBehaviour
     {
         return (Zagruzka || PleiBloc) || (resultat.NFT[NFTVID].Energia <= 0);
     }
+    public bool GetNftEnerzi()
+    {
+        return resultat.NFT[NFTVID].Energia==0;
+    }
 
     public void start()
     {
@@ -91,6 +102,15 @@ public class MasterLevel : MonoBehaviour
         if (onlain&&resultat.nonitka)
             StartCoroutine(strtObuseniaCoroutine());
         isEnd = false;
+    }
+
+    public void resetNFT()
+    {
+        if (onlain)
+        {
+            MN.GetRequest();
+            Zagruzka = true;
+        }
     }
 
     private void Awake()
@@ -127,6 +147,7 @@ public class MasterLevel : MonoBehaviour
         }
 
         distansia.text = ((int)((pleir.position.x - PC.StrtPosision.x) / 5)).ToString();
+        if (isEnd) timeSmert -= Time.fixedDeltaTime;
     }
 
 
@@ -139,6 +160,26 @@ public class MasterLevel : MonoBehaviour
     }
 
 
+    private void TestPleir()
+    {
+        onlain = false;
+        renderPleir(1);
+        //
+        
+        StartCoroutine(UiStarts());
+        //paus(false,true);
+    }
+
+    private IEnumerator UiStarts() {
+        yield return new WaitForSeconds(1);
+        UiStart us = GetComponent<UiStart>();
+        us.StartButton();
+        yield return new WaitForSeconds(1);
+        yield return strtObuseniaCoroutine();
+        paus(false);
+    } 
+
+
     private void conect()
     {
         string Otvet = MN.GetRequest();
@@ -147,6 +188,17 @@ public class MasterLevel : MonoBehaviour
 
         switch (Otvet)
         {
+            case "TestPleir":
+                if (testPlei)
+                {
+                    TestPleir();
+                    Zagruzka = false;
+                    erorit("Frre");
+                    PleiBloc = false;
+                }
+                else
+                    erorit("EroorNet");
+                return;
             case "EroorNet":
                 erorit("EroorNet");
                 return;
@@ -225,7 +277,21 @@ public class MasterLevel : MonoBehaviour
         }
         UndeitMenu();
         Zagruzka = false;
-        renderPleir(resultat.NFT[0].ÑlothesTip);
+
+        renderPleirstart();
+    }
+
+    private void renderPleirstart()
+    {
+        for (int i =0;i< resultat.NFT.Count; i++)
+        {
+            if (resultat.NFT[i].Energia != 0)
+            {
+                NFTVID = i;
+                break;
+            }
+        }
+        renderPleir(resultat.NFT[NFTVID].ÑlothesTip);
     }
 
 
@@ -235,7 +301,8 @@ public class MasterLevel : MonoBehaviour
         pausNOvisual();
         SetingsObject.SetActive(false);
         Obusenia.SetActive(true);
-        resultat.nonitka = false;
+        if(onlain)  
+            resultat.nonitka = false;
     }
 
     private void recordTadlica()
@@ -307,16 +374,21 @@ public class MasterLevel : MonoBehaviour
         if (Zagruzka && !isPaus && !Stop && onlain && !nervi)
             return;
         nervi = false;
+        Debug.Log("dasdasd");
 
+        Debug.Log(isPaus);
         if (Stop || PleiBloc)
             isPaus = false;
         else if (isIen)
             return;
-
+        Debug.Log("dasdasd2");
+        Debug.Log(isPaus);
         PausObject.SetActive(isPaus);
         if (isMusic)
             AMSnap[isPaus ? 0 : 1].TransitionTo(0.5f);
 
+        Debug.Log("dddddddddddddddddddddddddd");
+        Debug.Log(isPaus);
         if (isPaus)
             StartCoroutine(pausOff());
         else
@@ -326,7 +398,8 @@ public class MasterLevel : MonoBehaviour
         }
         mus.SetBool("mus", isMusic);
         isPaus = !isPaus;
-
+        Debug.Log(isPaus);
+        Debug.Log("dasdasd3");
         if (Obusenia.activeInHierarchy)
             Obusenia.SetActive(false);
     }
@@ -334,12 +407,14 @@ public class MasterLevel : MonoBehaviour
 
     public IEnumerator pausOff()
     {
+        Debug.Log("333333333");
         isIen = true;
-        menu.SetBool("stop", true);
+        pausMenu.SetBool("stop", true);
         PPV.enabled = false;
         yield return new WaitForSeconds(0.15f);
         SetingsObject.SetActive(false);
         isIen = false;
+        Debug.Log("3333333332222222222222");
     }
 
 
@@ -359,6 +434,8 @@ public class MasterLevel : MonoBehaviour
     //ðåñåò âîçðàò
     public void reset()
     {
+        if (timeSmert > 0) return;
+
         if (isPaus) paus();
 
 
@@ -373,6 +450,8 @@ public class MasterLevel : MonoBehaviour
             if (resultat.NFT[NFTVID].Energia <= 0)
                 vozrat();
         }
+
+        start();
     }
 
 
@@ -404,6 +483,7 @@ public class MasterLevel : MonoBehaviour
         if (isEnd)
             return;
         isEnd = true;
+        timeSmert = timeSmertStart;
         EndObject.SetActive(true);
         PausObject.SetActive(false);
         PPV.enabled = true;
@@ -427,8 +507,11 @@ public class MasterLevel : MonoBehaviour
 
     public void EnergiaPlus()
     {
-        resultat.NFT[NFTVID].Energia++;
-        MN.PostRequest(US.GetMoneu(), ((int)((pleir.position.x - PC.StrtPosision.x) / 5)), NFTVID,1);
+        if (onlain)
+        {
+            resultat.NFT[NFTVID].Energia++;
+            MN.PostRequest(US.GetMoneu(), ((int)((pleir.position.x - PC.StrtPosision.x) / 5)), NFTVID, 1);
+        }
     }
 
 
