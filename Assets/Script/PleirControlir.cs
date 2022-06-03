@@ -10,6 +10,7 @@ public class PleirControlir : MonoBehaviour
     [Header("Moving")]
     public float SpeedStart;
     public float Speed;
+    public float SpeedZadezka;
     public float SpeedX;
     public float Jamp;
     public float gravitasion;
@@ -131,7 +132,12 @@ public class PleirControlir : MonoBehaviour
     {
         //вечное двизения вперод
         if (!MasterLevel.isPaus)
-            transform.Translate(Vector2.right * Speed * Time.fixedDeltaTime);
+        {
+            if (SpeedZadezka < Speed)
+                SpeedZadezka += Speed/40;
+            transform.Translate(Vector2.right * SpeedZadezka * Time.fixedDeltaTime);
+        }
+            
 
         //амерть при проваливание
         if (transform.position.y < -10 && !MasterLevel.isPaus)
@@ -225,6 +231,11 @@ public class PleirControlir : MonoBehaviour
             Stoit();
         }
         isPaus = MasterLevel.isPaus;
+    }
+
+    public void reset()
+    {
+        SpeedZadezka = 0;
     }
 
 

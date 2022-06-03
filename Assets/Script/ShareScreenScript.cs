@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Collections;
 
-public class ShareScreenScript : MonoBehaviour {
+public static class ShareScreenScript {
 
     [DllImport("__Internal")]
     private static extern void ShareFuncsiaTelegram(int moneu,int distansion);
@@ -12,48 +12,56 @@ public class ShareScreenScript : MonoBehaviour {
     private static extern void ShareFuncsiaTwitter(int moneu, int distansion);
     [DllImport("__Internal")]
     private static extern void registor();
+    [DllImport("__Internal")]
+    private static extern bool buiNftJS();
 
-    private int moneu;
-    private int distansion;
-    public MasterLevel ML;
+    private static int moneu;
+    private static int distansion;
+    public static MasterLevel ML;
 
-    private void Start()
+    private static void Start()
     {
         ML = MasterLevel.singleton;
     }
 
-    private void dani()
+    private static void dani()
     {
         moneu = ML.GetMoneuShare();
         distansion = ML.GetDistansShare();
     }
 
-    public void ShareTelegram()
+    public static void ShareTelegram()
     {
         dani();
         ShareFuncsiaTelegram(moneu, distansion);
     }
 
-    public void ShareFacebook()
+    public static void ShareFacebook()
     {
         dani();
         ShareFuncsiaFacebook(moneu, distansion);
     }
 
-    public void ShareTwitter()
+    public static void ShareTwitter()
     {
         dani();
         ShareFuncsiaTwitter(moneu, distansion);
     }
 
-    public void registorAc()
+    public static void registorAc()
     {
         registor();
     }
 
-    public IEnumerator barerc()
+    public static bool buiNft()
+    {
+        return  buiNftJS();
+    }
+
+    public static IEnumerator barerc()
     {
         yield return new WaitForSeconds(1);
         ML.vozrat();
     }
 }
+

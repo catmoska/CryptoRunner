@@ -8,6 +8,8 @@ using UnityEngine.Audio;
 using UnityEngine.Events;
 using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.SceneManagement;
+using Unity.Jobs;
+using Unity.Collections;
 
 public class MasterLevel : MonoBehaviour
 {
@@ -23,6 +25,8 @@ public class MasterLevel : MonoBehaviour
 
     [Header("AudioMixer")]
     public Animator mus;
+    public Animator mus2;
+    public Animator mus3;
     public AudioMixer am;
     public AudioMixerSnapshot[] AMSnap = new AudioMixerSnapshot[2];
     public static bool isMusic = true;//MasterLevel.isMusic
@@ -59,8 +63,8 @@ public class MasterLevel : MonoBehaviour
     public GameObject record;
     public GameObject testFPS;
     public GameObject registor;
+
     [Header("Menu")]
-    public GameObject HomeMenu;
     public TextMeshProUGUI PleirMenuMoney;
     public TextMeshProUGUI PleirMenuEnergia;
     public TextMeshProUGUI NFTMenuNeim;
@@ -73,6 +77,15 @@ public class MasterLevel : MonoBehaviour
     [Header("kill")]
     public float timeSmertStart;
     private float timeSmert;
+    
+    [Header("MarcetPleis")]
+    public float stoimost;
+    public TextMeshProUGUI MarcetPleisSena;
+    public TextMeshProUGUI moneu;
+
+    public AudioSource audioVreibrasia;
+    public Animator energia;
+    public GameObject zoznai;
 
     [Header("BOOL")]
     public bool onlain;
@@ -102,6 +115,8 @@ public class MasterLevel : MonoBehaviour
         if (onlain&&resultat.nonitka)
             StartCoroutine(strtObuseniaCoroutine());
         isEnd = false;
+
+        resetMusic();
     }
 
     public void resetNFT()
@@ -111,6 +126,14 @@ public class MasterLevel : MonoBehaviour
             MN.GetRequest();
             Zagruzka = true;
         }
+    }
+
+
+    public void resetMusic()
+    {
+        mus.SetBool("mus", isMusic);
+        mus2.SetBool("mus", isMusic);
+        mus3.SetBool("mus", isMusic);
     }
 
     private void Awake()
@@ -130,6 +153,10 @@ public class MasterLevel : MonoBehaviour
         pausNOvisual();
         if (!onlain)
             renderPleir(1);
+
+        ///////
+        MarcetPleisSena.text = stoimost.ToString();
+        
     }
 
 
@@ -279,6 +306,7 @@ public class MasterLevel : MonoBehaviour
         Zagruzka = false;
 
         renderPleirstart();
+        MoneuMarcetPleis();
     }
 
     private void renderPleirstart()
@@ -374,21 +402,16 @@ public class MasterLevel : MonoBehaviour
         if (Zagruzka && !isPaus && !Stop && onlain && !nervi)
             return;
         nervi = false;
-        Debug.Log("dasdasd");
 
-        Debug.Log(isPaus);
         if (Stop || PleiBloc)
             isPaus = false;
         else if (isIen)
             return;
-        Debug.Log("dasdasd2");
-        Debug.Log(isPaus);
+
         PausObject.SetActive(isPaus);
         if (isMusic)
             AMSnap[isPaus ? 0 : 1].TransitionTo(0.5f);
 
-        Debug.Log("dddddddddddddddddddddddddd");
-        Debug.Log(isPaus);
         if (isPaus)
             StartCoroutine(pausOff());
         else
@@ -396,10 +419,8 @@ public class MasterLevel : MonoBehaviour
             PPV.enabled = true;
             SetingsObject.SetActive(true);
         }
-        mus.SetBool("mus", isMusic);
+        resetMusic();
         isPaus = !isPaus;
-        Debug.Log(isPaus);
-        Debug.Log("dasdasd3");
         if (Obusenia.activeInHierarchy)
             Obusenia.SetActive(false);
     }
@@ -407,14 +428,12 @@ public class MasterLevel : MonoBehaviour
 
     public IEnumerator pausOff()
     {
-        Debug.Log("333333333");
         isIen = true;
         pausMenu.SetBool("stop", true);
         PPV.enabled = false;
         yield return new WaitForSeconds(0.15f);
         SetingsObject.SetActive(false);
         isIen = false;
-        Debug.Log("3333333332222222222222");
     }
 
 
@@ -427,7 +446,8 @@ public class MasterLevel : MonoBehaviour
             AMSnap[2].TransitionTo(0.5f);
 
         isMusic = !isMusic;
-        mus.SetBool("mus", isMusic);
+
+        resetMusic();
     }
 
 
@@ -438,6 +458,7 @@ public class MasterLevel : MonoBehaviour
 
         if (isPaus) paus();
 
+        PC.reset();
 
         EndObject.SetActive(false);
         PunktObject.SetActive(true);
@@ -466,11 +487,6 @@ public class MasterLevel : MonoBehaviour
     //kill
     public void Kill()
     {
-        //PlayerPrefs.SetInt("Life", Life);
-        //PlayerPrefs.SetInt("TimeKill", time);
-        //if (US != null)
-        //    PlayerPrefs.SetInt("Moneu", PlayerPrefs.GetInt("Moneu") + US.GetMoneu());
-
         paus(true);
         if (!besmert)
             end();
@@ -545,6 +561,34 @@ public class MasterLevel : MonoBehaviour
         obgectss.SetActive(false);
     }
 
+    public void vribrasiaDolarMarcetPleis()
+    {
+        if (US.GetMoneu() > stoimost)
+        {
+            var i = new funcsiaNereclusenia();
+            i.Schedule();
+            if (isMusic)
+                Music();
+        }
+        else
+        {
+            audioVreibrasia.Play();
+            energia.SetTrigger("start");
+        }
+    }
+
+    public void music2()
+    {
+        if (!isMusic)
+            Music();
+        resetNFT();
+        zoznai.SetActive(true);
+    }
+
+    public void MoneuMarcetPleis()
+    {
+        moneu.text = US.GetMoneu().ToString();
+    }
 }
 
 
@@ -564,7 +608,16 @@ class jsonGETNFT
     public int Energia;
     public int EnergiaMax;
     public string Nick;
-
-    public int time; 
+    public int time;
     public int ÑlothesTip;
+}
+
+
+public struct funcsiaNereclusenia : IJob
+{
+    void IJob.Execute()
+    {
+        bool i = ShareScreenScript.buiNft();
+        MasterLevel.singleton.music2();
+    }
 }
