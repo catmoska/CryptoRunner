@@ -590,9 +590,9 @@ public class MasterLevel : MonoBehaviour
 
     public void vribrasiaDolarMarcetPleis()
     {
-        //if (!onlain) return;
+        if (!onlain) return;
         
-        if (true || resultat.Money >= resultat.moneuCeis)
+        if (resultat.Money >= resultat.moneuCeis)
         {
             isMusic2 = isMusic;
             if (isMusic)
