@@ -23,7 +23,7 @@ mergeInto(LibraryManager.library, {
   registor: function (moneu, distansion) {
     conect();
   },
-  buiNftJS: async function () {
-    return await buiNft();
+  buiNftJS: function () {
+    return StartbuiNft();
   },
 });

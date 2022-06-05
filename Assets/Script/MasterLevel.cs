@@ -29,7 +29,7 @@ public class MasterLevel : MonoBehaviour
     public Animator mus3;
     public AudioMixer am;
     public AudioMixerSnapshot[] AMSnap = new AudioMixerSnapshot[2];
-    public static bool isMusic = true;//MasterLevel.isMusic
+    public bool isMusic = false;//MasterLevel.isMusic
 
     [Header("Life")]
     public TextMeshProUGUI distansia;
@@ -79,7 +79,8 @@ public class MasterLevel : MonoBehaviour
     private float timeSmert;
     
     [Header("MarcetPleis")]
-    public float stoimost;
+    public GameObject MarcetPleisObzect;
+    public GameObject HomeMenuObzect;
     public TextMeshProUGUI MarcetPleisSena;
     public TextMeshProUGUI moneu;
 
@@ -92,6 +93,32 @@ public class MasterLevel : MonoBehaviour
     public bool besmert;
     public bool testPlei;
 
+    private void Awake()
+    {
+#if !UNITY_EDITOR
+        onlain = true;
+        besmert = false;
+        Debug.Log("Start Bild");
+#endif
+        singleton = this;
+        if (onlain)
+            MN.GetRequest();
+    }
+
+
+    private void Start()
+    {
+        Music(true);
+
+        if (PC == null)
+            PC = pleir.GetComponent<PleirControlir>();
+        if (US == null)
+            US = GetComponent<UiSpisac>();
+        pausNOvisual();
+        if (!onlain)
+            renderPleir(1);
+    }
+
 
     private void renderPleir(int znas)
     {
@@ -99,14 +126,18 @@ public class MasterLevel : MonoBehaviour
         pleirRender2.sprite= PleirSprite[znas-1];
     }
 
+
     public bool GetZagruzka()
     {
         return (Zagruzka || PleiBloc) || (resultat.NFT[NFTVID].Energia <= 0);
     }
+
+
     public bool GetNftEnerzi()
     {
         return resultat.NFT[NFTVID].Energia==0;
     }
+
 
     public void start()
     {
@@ -118,6 +149,7 @@ public class MasterLevel : MonoBehaviour
 
         resetMusic();
     }
+
 
     public void resetNFT()
     {
@@ -134,29 +166,6 @@ public class MasterLevel : MonoBehaviour
         mus.SetBool("mus", isMusic);
         mus2.SetBool("mus", isMusic);
         mus3.SetBool("mus", isMusic);
-    }
-
-    private void Awake()
-    {
-        singleton = this;
-        if (onlain)
-            MN.GetRequest();
-    }
-
-
-    private void Start()
-    {
-        if (PC == null)
-            PC = pleir.GetComponent<PleirControlir>();
-        if (US == null)
-            US = GetComponent<UiSpisac>();
-        pausNOvisual();
-        if (!onlain)
-            renderPleir(1);
-
-        ///////
-        MarcetPleisSena.text = stoimost.ToString();
-        
     }
 
 
@@ -180,10 +189,15 @@ public class MasterLevel : MonoBehaviour
 
     private void Update()
     {
+#if UNITY_EDITOR
         if (Input.GetKeyDown(KeyCode.E))
             reset();
+        if (Input.GetKeyDown(KeyCode.W))
+            start2();
+#endif
         if (Input.GetKeyDown(KeyCode.Q))
             testFPS.SetActive(!testFPS.activeInHierarchy);
+        
     }
 
 
@@ -252,7 +266,7 @@ public class MasterLevel : MonoBehaviour
 
         resultat = new jsonGETPleir();
 
-        int elementov = 3;
+        int elementov = 4;
         string[] jsonOtvet = new string[elementov];
         int reset = 0;
         for(int i = 0; i < Otvet.Length; i++)
@@ -274,6 +288,7 @@ public class MasterLevel : MonoBehaviour
         resultat.Money = (float)Convert.ToDouble(jsonOtvet[0]);
         resultat.Record = (float)Convert.ToDouble(jsonOtvet[1]);
         resultat.nonitka = Convert.ToBoolean(jsonOtvet[2]);
+        resultat.moneuCeis = Convert.ToInt32(jsonOtvet[3]);
         //////////////////////////////////////////////////////////
         elementov = 5;
         jsonOtvet = new string[elementov];
@@ -342,6 +357,7 @@ public class MasterLevel : MonoBehaviour
 
     public void smenaNFT(bool y)
     {
+        if (!onlain) return;
         NFTVID += y ? 1 : -1;
         if (NFTVID < 0) NFTVID = resultat.NFT.Count - 1;
         else if (NFTVID >= resultat.NFT.Count) NFTVID = 0;
@@ -364,7 +380,12 @@ public class MasterLevel : MonoBehaviour
         NFTMenuNeim.text = NickNFT;
         NFTMenuEnergia.text = EnergiaNFT + "/" + EnergiaMaxNFT;
 
-        timeObject.text = time+"min";
+        if(time != "0")
+            timeObject.text = time + "min";
+        else
+            timeObject.text = "full";
+
+        MarcetPleisSena.text = resultat.moneuCeis.ToString();
 
         if (resultat.NFT.Count == 0)
             erorit("EroorNFT", false);
@@ -436,16 +457,22 @@ public class MasterLevel : MonoBehaviour
         isIen = false;
     }
 
-
     //вкл/викл музику
     public void Music()
+    {
+        Music(false);
+    }
+
+    //вкл/викл музику
+    public void Music(bool d)
     {
         if (!isMusic)
             AMSnap[isPaus ? 1 : 0].TransitionTo(0.5f);
         else
             AMSnap[2].TransitionTo(0.5f);
 
-        isMusic = !isMusic;
+        //if (!d)
+            isMusic = !isMusic;
 
         resetMusic();
     }
@@ -563,12 +590,23 @@ public class MasterLevel : MonoBehaviour
 
     public void vribrasiaDolarMarcetPleis()
     {
-        if (US.GetMoneu() > stoimost)
+        //if (!onlain) return;
+        
+        if (true || resultat.Money >= resultat.moneuCeis)
         {
-            var i = new funcsiaNereclusenia();
-            i.Schedule();
+            isMusic2 = isMusic;
             if (isMusic)
                 Music();
+            
+            zoznai.SetActive(true);
+            ///////////
+            //var i = new funcsiaNereclusenia();
+            //i.Schedule();
+            ////////
+            StartCoroutine(barerc());
+            ////////
+            //ShareScreenScript.buiNft();
+            //start2();
         }
         else
         {
@@ -577,20 +615,40 @@ public class MasterLevel : MonoBehaviour
         }
     }
 
-    public void music2()
+    public IEnumerator barerc()
     {
-        if (!isMusic)
+        bool i = ShareScreenScript.buiNft();
+        //yield return new WaitForSeconds(3f);
+        while (!i)
+        {
+            yield return new WaitForSeconds(0.1f);
+            i = ShareScreenScript.buiNft();
+            //Debug.Log(i + "  dasdad2222222");
+            //Debug.Log("dasd");        
+        }
+        start2();
+    }
+
+    bool isMusic2;
+    public void start2()
+    {
+        if (isMusic2)
             Music();
         resetNFT();
-        zoznai.SetActive(true);
+        zoznai.SetActive(false);
+        MarcetPleisObzect.SetActive(false);
+        HomeMenuObzect.SetActive(true);
+        Debug.Log("fin");
+        //vozrat();
     }
 
     public void MoneuMarcetPleis()
     {
-        moneu.text = US.GetMoneu().ToString();
+        if (onlain)
+            moneu.text = resultat.Money.ToString();
     }
-}
 
+}
 
 
 [System.Serializable]
@@ -599,6 +657,7 @@ class jsonGETPleir
     public float Money;
     public float Record;
     public bool nonitka;
+    public int moneuCeis;
     public List<jsonGETNFT> NFT =new List<jsonGETNFT>();
 }
 
@@ -610,14 +669,4 @@ class jsonGETNFT
     public string Nick;
     public int time;
     public int СlothesTip;
-}
-
-
-public struct funcsiaNereclusenia : IJob
-{
-    void IJob.Execute()
-    {
-        bool i = ShareScreenScript.buiNft();
-        MasterLevel.singleton.music2();
-    }
 }

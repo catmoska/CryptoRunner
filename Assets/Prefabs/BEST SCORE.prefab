@@ -335,6 +335,7 @@ GameObject:
   - component: {fileID: 7057353299259396568}
   - component: {fileID: 4037602769113166784}
   - component: {fileID: 7675225260356070252}
+  - component: {fileID: 1787794036}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -392,8 +393,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "BEST \nSCORE"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 344d7421de8ec6944a1629e8bb27cedb, type: 2}
-  m_sharedMaterial: {fileID: -1560454952855316323, guid: 344d7421de8ec6944a1629e8bb27cedb, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 32cb73aa32d362645b20f1f39c685302, type: 2}
+  m_sharedMaterial: {fileID: -600645179279989197, guid: 32cb73aa32d362645b20f1f39c685302, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -417,8 +418,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 1.6
-  m_fontSizeBase: 1.6
+  m_fontSize: 2.2
+  m_fontSizeBase: 2.2
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -459,3 +460,23 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!95 &1787794036
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6100300677525914726}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 362bf6f8f2f4ec241a09a6b4acf2451e, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

@@ -17,15 +17,11 @@ public static class ShareScreenScript {
 
     private static int moneu;
     private static int distansion;
-    public static MasterLevel ML;
-
-    private static void Start()
-    {
-        ML = MasterLevel.singleton;
-    }
 
     private static void dani()
     {
+        MasterLevel ML;
+        ML = MasterLevel.singleton;
         moneu = ML.GetMoneuShare();
         distansion = ML.GetDistansShare();
     }
@@ -55,13 +51,10 @@ public static class ShareScreenScript {
 
     public static bool buiNft()
     {
-        return  buiNftJS();
+        bool i = buiNftJS();
+        //Debug.Log(i +  "  dasdad");
+        return i;
     }
 
-    public static IEnumerator barerc()
-    {
-        yield return new WaitForSeconds(1);
-        ML.vozrat();
-    }
 }
 
