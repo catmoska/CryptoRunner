@@ -24,11 +24,13 @@ public class UiStart : MonoBehaviour
     {
         if (ML.onlain && ML.GetNftEnerzi())
         {
+            //запуск игри по онлаином
             audioVreibrasia.Play();
             energia.SetTrigger("start");
         }
         else if (!ML.onlain || !ML.GetZagruzka())
         {
+            //запуск игри без 
             HitStart.Invoke();
             menu.SetActive(false);
             canvosOsnovnoi.SetActive(true);

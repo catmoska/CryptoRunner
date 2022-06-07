@@ -10068,6 +10068,7 @@ MonoBehaviour:
   - {fileID: 5546545223336308057, guid: 8f5adeb74b03fa046b1b2b5b4f7c6f9b, type: 2}
   isMusic: 0
   distansia: {fileID: 1216531834}
+  EndDistansia: 0
   US: {fileID: 1827687457}
   pleir: {fileID: 1464235266}
   EndObject: {fileID: 309859612}
@@ -10154,7 +10155,7 @@ MonoBehaviour:
   audioVreibrasia: {fileID: 75190367}
   energia: {fileID: 1597192380}
   zoznai: {fileID: 506457067}
-  onlain: 0
+  onlain: 1
   besmert: 0
   testPlei: 0
 --- !u!114 &1827687457

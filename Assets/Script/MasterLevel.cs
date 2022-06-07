@@ -33,6 +33,7 @@ public class MasterLevel : MonoBehaviour
 
     [Header("Life")]
     public TextMeshProUGUI distansia;
+    public int EndDistansia;
     public UiSpisac US;
     public Transform pleir;
 
@@ -93,6 +94,8 @@ public class MasterLevel : MonoBehaviour
     public bool besmert;
     public bool testPlei;
 
+
+
     private void Awake()
     {
 #if !UNITY_EDITOR
@@ -108,69 +111,25 @@ public class MasterLevel : MonoBehaviour
 
     private void Start()
     {
-        Music(true);
+        // обновления звука
+        Music();
 
+        // куширования
         if (PC == null)
             PC = pleir.GetComponent<PleirControlir>();
         if (US == null)
             US = GetComponent<UiSpisac>();
+
+        // остановка но паузу (для главного мену)
         pausNOvisual();
         if (!onlain)
             renderPleir(1);
     }
 
 
-    private void renderPleir(int znas)
-    {
-        pleirRender.sprite = PleirSprite[znas-1];
-        pleirRender2.sprite= PleirSprite[znas-1];
-    }
-
-
-    public bool GetZagruzka()
-    {
-        return (Zagruzka || PleiBloc) || (resultat.NFT[NFTVID].Energia <= 0);
-    }
-
-
-    public bool GetNftEnerzi()
-    {
-        return resultat.NFT[NFTVID].Energia==0;
-    }
-
-
-    public void start()
-    {
-        singleton = this;
-        recordTadlica();
-        if (onlain&&resultat.nonitka)
-            StartCoroutine(strtObuseniaCoroutine());
-        isEnd = false;
-
-        resetMusic();
-    }
-
-
-    public void resetNFT()
-    {
-        if (onlain)
-        {
-            MN.GetRequest();
-            Zagruzka = true;
-        }
-    }
-
-
-    public void resetMusic()
-    {
-        mus.SetBool("mus", isMusic);
-        mus2.SetBool("mus", isMusic);
-        mus3.SetBool("mus", isMusic);
-    }
-
-
     private void FixedUpdate()
     {
+        // загрузка
         if (onlain)
         {
             if (Zagruzka)
@@ -182,7 +141,11 @@ public class MasterLevel : MonoBehaviour
             }
         }
 
-        distansia.text = ((int)((pleir.position.x - PC.StrtPosision.x) / 5)).ToString();
+
+        if(!isPaus)
+            UpdeitDistansiaText();
+
+        // умеенения времини жижни
         if (isEnd) timeSmert -= Time.fixedDeltaTime;
     }
 
@@ -195,22 +158,95 @@ public class MasterLevel : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.W))
             start2();
 #endif
+        // вклучения debug
         if (Input.GetKeyDown(KeyCode.Q))
             testFPS.SetActive(!testFPS.activeInHierarchy);
-        
+
     }
 
 
+    // обновления отобразения дистансий
+    private void UpdeitDistansiaText()
+    {
+        int i = ((int)((pleir.position.x - PC.StrtPosision.x) / 5));
+        if (i != EndDistansia || EndDistansia==0)
+        {
+            EndDistansia = i;
+            distansia.text = i.ToString();
+        }
+    }
+
+
+    // обновляет картинки у персоназев
+    private void renderPleir(int znas)
+    {
+        pleirRender.sprite = PleirSprite[znas-1];
+        pleirRender2.sprite= PleirSprite[znas-1];
+    }
+
+
+    // проверка возмознасти загрузатса с главного мену
+    public bool GetZagruzka()
+    {
+        return (Zagruzka || PleiBloc) || (resultat.NFT[NFTVID].Energia <= 0);
+    }
+
+
+    // возрачает состоянйя енергий вибраного nft 
+    public bool GetNftEnerzi()
+    {
+        return resultat.NFT[NFTVID].Energia==0;
+    }
+
+
+    // второи старт (бистрий рестарт)
+    public void start()
+    {
+        singleton = this;
+        
+        recordTadlica();
+        
+        if (onlain&&resultat.nonitka)
+            StartCoroutine(strtObuseniaCoroutine());
+        isEnd = false;
+
+        //востановления музики
+        resetMusic();
+    }
+
+
+    // презагрузает информасию про ползавателя и nft
+    public void resetNFT()
+    {
+        if (onlain)
+        {
+            MN.GetRequest();
+            Zagruzka = true;
+        }
+    }
+
+
+    // обновляет отобразения переклучателей на канвасе
+    public void resetMusic()
+    {
+        mus.SetBool("mus", isMusic);
+        mus2.SetBool("mus", isMusic);
+        mus3.SetBool("mus", isMusic);
+    }
+
+
+    //(в разработке) запуск игри в тестовам резиме
     private void TestPleir()
     {
         onlain = false;
         renderPleir(1);
-        //
         
         StartCoroutine(UiStarts());
         //paus(false,true);
     }
 
+
+    //(в разработке) подготовка ui для тестового резима
     private IEnumerator UiStarts() {
         yield return new WaitForSeconds(1);
         UiStart us = GetComponent<UiStart>();
@@ -221,12 +257,14 @@ public class MasterLevel : MonoBehaviour
     } 
 
 
+    // подклучения к сети
     private void conect()
     {
         string Otvet = MN.GetRequest();
         if (Otvet == "") return;
         Debug.Log("OtvetServer: " + Otvet);
 
+        // проверка на ошибки
         switch (Otvet)
         {
             case "TestPleir":
@@ -256,6 +294,8 @@ public class MasterLevel : MonoBehaviour
                 break;
         }
 
+        //// обработк даних
+        //подгатовка даних
         string Otvet2 = "";
         for (int i = 0; i < Otvet.Length; i++)
             if (Otvet[i] != '.')
@@ -266,6 +306,8 @@ public class MasterLevel : MonoBehaviour
 
         resultat = new jsonGETPleir();
 
+
+        // обработка даних ползателя
         int elementov = 4;
         string[] jsonOtvet = new string[elementov];
         int reset = 0;
@@ -289,7 +331,9 @@ public class MasterLevel : MonoBehaviour
         resultat.Record = (float)Convert.ToDouble(jsonOtvet[1]);
         resultat.nonitka = Convert.ToBoolean(jsonOtvet[2]);
         resultat.moneuCeis = Convert.ToInt32(jsonOtvet[3]);
-        //////////////////////////////////////////////////////////
+
+
+        //обработка даних NFT
         elementov = 5;
         jsonOtvet = new string[elementov];
         int reset2 = 0;
@@ -317,14 +361,18 @@ public class MasterLevel : MonoBehaviour
                     break;
             }
         }
+
+        // обновления всех функсий с параметрами
         UndeitMenu();
         Zagruzka = false;
 
-        renderPleirstart();
-        MoneuMarcetPleis();
+        renderPleirStart();
+        if (onlain) moneu.text = resultat.Money.ToString();
     }
 
-    private void renderPleirstart()
+
+    // проверка на енерги e NFT
+    private void renderPleirStart()
     {
         for (int i =0;i< resultat.NFT.Count; i++)
         {
@@ -338,6 +386,7 @@ public class MasterLevel : MonoBehaviour
     }
 
 
+    // стартовое обновления
     private IEnumerator strtObuseniaCoroutine()
     {
         yield return new WaitForSeconds(3);
@@ -348,6 +397,8 @@ public class MasterLevel : MonoBehaviour
             resultat.nonitka = false;
     }
 
+
+    // обновлает позисию рекорда
     private void recordTadlica()
     {
         if (onlain && resultat.Record > 10)
@@ -355,6 +406,7 @@ public class MasterLevel : MonoBehaviour
     }
 
 
+    // переклучения NFT
     public void smenaNFT(bool y)
     {
         if (!onlain) return;
@@ -365,8 +417,10 @@ public class MasterLevel : MonoBehaviour
     }
 
 
+    // подставка всех даних
     public void UndeitMenu()
     {
+        // обработка
         string Money = resultat.Money.ToString();
         string EnergiaNFT = resultat.NFT[NFTVID].Energia.ToString();
         string EnergiaMaxNFT = resultat.NFT[NFTVID].EnergiaMax.ToString();
@@ -374,7 +428,7 @@ public class MasterLevel : MonoBehaviour
         string time = resultat.NFT[NFTVID].time.ToString();
         renderPleir(resultat.NFT[NFTVID].СlothesTip);
         
-
+        // обновления значений
         PleirMenuMoney.text = Money.ToString();
 
         NFTMenuNeim.text = NickNFT;
@@ -392,6 +446,7 @@ public class MasterLevel : MonoBehaviour
     }
 
 
+    //вивод ошибки на канвос
     private void erorit(string text, bool tos = true)
     {
         if (tos)
@@ -407,7 +462,7 @@ public class MasterLevel : MonoBehaviour
     }
 
 
-    //пауза
+    // гарантируемая пауза с не отобразениям на екране
     public void pausNOvisual()
     {
         paus(false);
@@ -418,6 +473,7 @@ public class MasterLevel : MonoBehaviour
 
     bool isIen;
     bool nervi = true;
+    //пауза
     public void paus(bool Stop = false)
     {
         if (Zagruzka && !isPaus && !Stop && onlain && !nervi)
@@ -447,6 +503,7 @@ public class MasterLevel : MonoBehaviour
     }
 
 
+    //отклучения паузи
     public IEnumerator pausOff()
     {
         isIen = true;
@@ -457,21 +514,15 @@ public class MasterLevel : MonoBehaviour
         isIen = false;
     }
 
-    //вкл/викл музику
-    public void Music()
-    {
-        Music(false);
-    }
 
     //вкл/викл музику
-    public void Music(bool d)
+    public void Music()
     {
         if (!isMusic)
             AMSnap[isPaus ? 1 : 0].TransitionTo(0.5f);
         else
             AMSnap[2].TransitionTo(0.5f);
 
-        //if (!d)
             isMusic = !isMusic;
 
         resetMusic();
@@ -548,6 +599,7 @@ public class MasterLevel : MonoBehaviour
     }
 
 
+    // добавления енергий NFT
     public void EnergiaPlus()
     {
         if (onlain)
@@ -558,21 +610,28 @@ public class MasterLevel : MonoBehaviour
     }
 
 
+    // дубликат US.GetMoneu();
     public int GetMoneuShare()
     {
         return US.GetMoneu();
     }
 
+
+    // одает дистансию
     public int GetDistansShare()
     {
         return ((int)((pleir.position.x - PC.StrtPosision.x) / 5));
     }
 
+
+    // get idPaus
     public bool GetisPaus()
     {
         return isPaus;
     }
 
+
+    // закритее мену X
     public void zacrit(GameObject obgectss)
     {
         GameObject obgectsss = obgectss.transform.Find("Image").gameObject;
@@ -582,12 +641,16 @@ public class MasterLevel : MonoBehaviour
         StartCoroutine(zacritCur(obgectss));
     }
 
+
+    // закритее-отклучения мену X 
     public IEnumerator zacritCur(GameObject obgectss)
     {
         yield return new WaitForSeconds(0.15f);
         obgectss.SetActive(false);
     }
 
+
+    // MarcetPleis проверка на достаток монет и иврибрасия при не хватке (создания транзаксий)
     public void vribrasiaDolarMarcetPleis()
     {
         if (!onlain) return;
@@ -597,16 +660,8 @@ public class MasterLevel : MonoBehaviour
             isMusic2 = isMusic;
             if (isMusic)
                 Music();
-            
             zoznai.SetActive(true);
-            ///////////
-            //var i = new funcsiaNereclusenia();
-            //i.Schedule();
-            ////////
             StartCoroutine(barerc());
-            ////////
-            //ShareScreenScript.buiNft();
-            //start2();
         }
         else
         {
@@ -615,6 +670,8 @@ public class MasterLevel : MonoBehaviour
         }
     }
 
+
+    // сканирования транзаксий на конес
     public IEnumerator barerc()
     {
         bool i = ShareScreenScript.buiNft();
@@ -629,7 +686,9 @@ public class MasterLevel : MonoBehaviour
         start2();
     }
 
+
     bool isMusic2;
+    // востановления всех параметров после транзаксий
     public void start2()
     {
         if (isMusic2)
@@ -642,15 +701,9 @@ public class MasterLevel : MonoBehaviour
         //vozrat();
     }
 
-    public void MoneuMarcetPleis()
-    {
-        if (onlain)
-            moneu.text = resultat.Money.ToString();
-    }
-
 }
 
-
+// клас с параметрами про игрока
 [System.Serializable]
 class jsonGETPleir
 {
@@ -661,6 +714,7 @@ class jsonGETPleir
     public List<jsonGETNFT> NFT =new List<jsonGETNFT>();
 }
 
+// клас с параметрами для NFT
 [System.Serializable]
 class jsonGETNFT
 {

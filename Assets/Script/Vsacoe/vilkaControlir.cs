@@ -1,5 +1,7 @@
 using UnityEngine;
 
+// скрипт для управлениям копям (vilka називаетса потомушта била сначала вилка а сесас копо)
+//не наследует "RunMonoBehaviour" потомушто исклучениям является
 public class vilkaControlir : MonoBehaviour
 {
     private Transform Pleir;
@@ -23,6 +25,7 @@ public class vilkaControlir : MonoBehaviour
 
     void FixedUpdate()
     {
+        //проверка селостнасти даних
         if (Pleir == null)
             Pleir = PleirControlir.singletonGameObject.transform;
         if (ML == null)
@@ -31,10 +34,7 @@ public class vilkaControlir : MonoBehaviour
         if (znasok != null && transform.position.x - Pleir.position.x <= triger+ trigerObzect)
             znasok.transform.position = new Vector2(Pleir.position.x+ smesenia,transform.position.y);
         
-        //Debug.Log(ML.GetisPaus());
-        //Debug.Log(Pleir.position.x);
-
-
+        //двизения обекта
         if (!ML.GetisPaus() && transform.position.x - Pleir.position.x <= triger)
         {
             transform.Translate(Vector2.up * speed * Time.fixedDeltaTime);

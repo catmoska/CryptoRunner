@@ -3,17 +3,14 @@ using System.Runtime.InteropServices;
 using System.Collections;
 
 public static class ShareScreenScript {
-
+    // поделиса
     [DllImport("__Internal")]
     private static extern void ShareFuncsiaTelegram(int moneu,int distansion);
     [DllImport("__Internal")]
     private static extern void ShareFuncsiaFacebook(int moneu, int distansion);
     [DllImport("__Internal")]
     private static extern void ShareFuncsiaTwitter(int moneu, int distansion);
-    [DllImport("__Internal")]
-    private static extern void registor();
-    [DllImport("__Internal")]
-    private static extern bool buiNftJS();
+    
 
     private static int moneu;
     private static int distansion;
@@ -44,10 +41,18 @@ public static class ShareScreenScript {
         ShareFuncsiaTwitter(moneu, distansion);
     }
 
+    ///////////////////// зарегистривуваса
+    [DllImport("__Internal")]
+    private static extern void registor();
+
     public static void registorAc()
     {
         registor();
     }
+
+    ///////////////////// купить бокс
+    [DllImport("__Internal")]
+    private static extern bool buiNftJS();
 
     public static bool buiNft()
     {

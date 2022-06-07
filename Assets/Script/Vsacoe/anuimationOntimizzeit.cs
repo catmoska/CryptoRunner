@@ -1,5 +1,6 @@
 using UnityEngine;
 
+//(всо очен запутана) анимируимий обекти отклучаиюся послу вихода из зони достизения
 public class anuimationOntimizzeit : RunMonoBehaviour
 {
     private Transform Pleir;
@@ -9,7 +10,7 @@ public class anuimationOntimizzeit : RunMonoBehaviour
     private Animator an;
 
 
-    void Start()
+    private void Start()
     {
         updeitMeneger.singleton.RMB.Add(this);
         if (Pleir == null)
@@ -23,6 +24,7 @@ public class anuimationOntimizzeit : RunMonoBehaviour
             active = false;
         }
     }
+
 
     public override bool Run()
     {

@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-//двизить монетку по вертикале и ишезает
+//двизить монетку по вертикале и ишезает (всо очееен запутана)
 public class MoneuDellControlir : MonoBehaviour
 {
     public bool nrig = true;
@@ -9,6 +9,8 @@ public class MoneuDellControlir : MonoBehaviour
     private float speed = 200;
     private static string neimtegNOisk = "Player";
     //private static string neimtegNOisk = "MoneuUi";
+
+
     private void Start()
     {
         if (nrig && Random.Range(0, 3) == 0)
@@ -23,10 +25,12 @@ public class MoneuDellControlir : MonoBehaviour
         
     }
 
+
     public void start()
     {
         StartCoroutine(barerc());
     }
+
 
     public IEnumerator barerc()
     {
@@ -47,13 +51,5 @@ public class MoneuDellControlir : MonoBehaviour
             transform.position = Vector2.MoveTowards(transform.position, mobeuZob.position, speed * Time.fixedDeltaTime); ;
             yield return new WaitForSeconds(0.02f);
         }
-    }
-
-    private int Randik(int Max)
-    {
-        for (int i = 0; i < Max; i++)
-            if (Random.Range(0, 2) == 0)
-                return i;
-        return Max - 1;
     }
 }

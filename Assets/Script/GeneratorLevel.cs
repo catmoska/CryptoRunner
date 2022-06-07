@@ -43,18 +43,21 @@ public class GeneratorLevel : MonoBehaviour
         generit();
     }
 
+
     private void FixedUpdate()
     {
         if (timer > 0)
             timer -= Time.fixedDeltaTime;
-
     }
 
+
+    // зпуск генирасий занова
     private void start()
     {
         //if (timer <= 0)
         generitRES(Vector3.zero);
     }
+
 
     //главний гениратор
     float moneusic;
@@ -76,7 +79,7 @@ public class GeneratorLevel : MonoBehaviour
         yield return new WaitForSeconds(Zaderzka);
         for (; i < takti && (notok == notokLokal);)
         {
-            //if (notok != notokLokal) break;
+            if (notok != notokLokal) break;
 
             int u = Randik(vidi + 1);
             switch (u)
@@ -119,12 +122,15 @@ public class GeneratorLevel : MonoBehaviour
         yield return new WaitForSeconds(0);
     }
 
+
     //StartUdalenia
     private void del()
     {
         StartCoroutine(delC(Dell[Dell.Count - 1]));
     }
 
+
+    // удаления в одном кадре всех обектов
     private void delR()
     {
         for (int i = 0; i < Dell.Count; i++)
@@ -135,6 +141,8 @@ public class GeneratorLevel : MonoBehaviour
         Dell = new List<GameObject>();
     }
 
+
+    // удаления с отлозения
     public IEnumerator delC(GameObject OBject)
     {
         List<GameObject> Dell2 = Dell;
@@ -152,6 +160,7 @@ public class GeneratorLevel : MonoBehaviour
         Destroy(OBject);
     }
 
+
     //StartGenerasia
     public void generit(Vector3 kord)
     {
@@ -161,6 +170,8 @@ public class GeneratorLevel : MonoBehaviour
         StartCoroutine(generitKadar(kord + smesemiaTemno));
     }
 
+
+    // рестарт генерасий
     private void generitRES(Vector3 kord)
     {
         timer = timerstart;
@@ -170,10 +181,13 @@ public class GeneratorLevel : MonoBehaviour
         StartCoroutine(generitKadar(kord));
     }
 
+
+    //стартовий гениратор
     private void generit()
     {
         generitRES(Vector3.zero);
     }
+
 
     //уменшиний рандом
     private int Randik(int Max)
@@ -184,11 +198,13 @@ public class GeneratorLevel : MonoBehaviour
         return Max - 1;
     }
 
+
     //делает случаино поворот
     private Quaternion Zerkal()
     {
         return Quaternion.Euler(new Vector3(0, Random.Range(0, 2) * 180, 0));
     }
+
 
     //збрасивает все параметри до дефолт
     private void zbros()
@@ -204,6 +220,7 @@ public class GeneratorLevel : MonoBehaviour
     {
         return i;
     }
+
 
     //гениратор монет
     private void GENmoneu(int i, Vector2 kord, bool uron = true)
@@ -224,6 +241,7 @@ public class GeneratorLevel : MonoBehaviour
             moneusic /= 2;
     }
 
+
     //генирратор платформ
     private int GENplatform(int i, Vector2 kord, bool mon = true, bool uron = true)
     {
@@ -233,6 +251,7 @@ public class GeneratorLevel : MonoBehaviour
         i++;
         return i;
     }
+
 
     //генирратор префабов
     private int GENprefabc(int i, Vector2 kord)
@@ -253,6 +272,7 @@ public class GeneratorLevel : MonoBehaviour
 
         return i;
     }
+
 
     //генирратор префабов вибраних
     private int GENprefabcClon(int i, Vector2 kord, int clonI = -1, Quaternion novarot = new Quaternion())
@@ -282,6 +302,7 @@ public class GeneratorLevel : MonoBehaviour
         return i;
     }
 
+
     //генирратор платформ весясих в воздухе
     private Vector2 smesenia_GENnlatformSip = new Vector2(0, 3.5f);
     private Vector2Int ranNar_GENnlatformSip = new Vector2Int(4, 15);
@@ -302,6 +323,7 @@ public class GeneratorLevel : MonoBehaviour
             i = GENplatform(i, kord);
         return i;
     }
+
 
     //генирратор леани и 2 яруса
     private bool isDvuska_GENplatformEtaz = false;
@@ -337,6 +359,7 @@ public class GeneratorLevel : MonoBehaviour
         return i;
     }
 
+
     //генирратор головних кристалов
     private Vector2 smesenia_GENplatVisaco = new Vector2(0, 8.5f);
     private Vector2 smesenia2_GENplatVisaco = new Vector2(0, 4);
@@ -371,6 +394,7 @@ public class GeneratorLevel : MonoBehaviour
         iStop_GENplatVisaco = i;
         return i;
     }
+
 
     ////генирратор платформ с низу
     private bool isDvuska_GENplatformNoava = false;
@@ -415,6 +439,7 @@ public class GeneratorLevel : MonoBehaviour
     }
 
 
+    //генирасия копя
     private int otstup_GENCone=25;
     private Vector2Int ran_GENCone = new Vector2Int(1, 3);
     private int GENCone(int i, Vector2 kord)

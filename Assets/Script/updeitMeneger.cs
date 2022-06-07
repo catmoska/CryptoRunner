@@ -11,11 +11,13 @@ public class updeitMeneger : MonoBehaviour
     private int sisla;
     public MasterLevel ML;
 
+
     private void Awake() 
     {
         RMB = new List<RunMonoBehaviour>();
         singleton = this;
     }
+
 
     private void Start()
     {
@@ -23,36 +25,19 @@ public class updeitMeneger : MonoBehaviour
             ML = MasterLevel.singleton;
     }
 
-    public void start()
-    {
-        RMB = new List<RunMonoBehaviour>();
-        nomentic = new List<int>();
-        FixedUpdate();
-    }
-
-    private bool Run(int i)
-    {
-        if (RMB[i] == null) {
-            nomentic.Add(i);
-            return true; 
-        }
-        return RMB[i].Run();
-    }
-   
 
     void FixedUpdate()
     {
         //if (ML.GetisPaus()) return;
 
         int i;
-
-        for (i=0;i < RMB.Count; i++)
-            if(!Run(i))break;
+        for (i = 0; i < RMB.Count; i++)
+            if (!Run(i)) break;
         if (i == RMB.Count) return;
         int res = i + 10;
 
-        for (i = 0; res>i && i < RMB.Count; i++)
-            if(Run(i))res= i + 10;
+        for (i = 0; res > i && i < RMB.Count; i++)
+            if (Run(i)) res = i + 10;
 
         if (sislaSmena <= sisla)
         {
@@ -63,6 +48,28 @@ public class updeitMeneger : MonoBehaviour
         sisla++;
     }
 
+
+    //второи старт
+    public void start()
+    {
+        RMB = new List<RunMonoBehaviour>();
+        nomentic = new List<int>();
+        FixedUpdate();
+    }
+
+
+    // запуск скрипта и обработка dell
+    private bool Run(int i)
+    {
+        if (RMB[i] == null) {
+            nomentic.Add(i);
+            return true; 
+        }
+        return RMB[i].Run();
+    }
+   
+
+    //очистка масива
     void sistka()
     {
         if (nomentic == null) return;

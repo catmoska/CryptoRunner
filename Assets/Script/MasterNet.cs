@@ -7,60 +7,60 @@ public class MasterNet : MonoBehaviour
 {
     public string url = "http://127.0.0.1:8000/DATA/";
 
-    //////////
-    public void PostRequest(string json)
-    { StartCoroutine(PostRequestB(json)); }
+    ////////////post
+    //public void PostRequest(string json)
+    //{ StartCoroutine(PostRequestB(json)); }
 
-    private IEnumerator PostRequestB(string jso)
-    {
-        string json = "";
-        for (int i = 1; i < jso.Length - 1; i++)
-            json += i;
-
-
-        WWWForm form = new WWWForm();
-
-        string kei = "";
-        string znasenia = "";
-        bool kto = false;
+    //private IEnumerator PostRequestB(string jso)
+    //{
+    //    string json = "";
+    //    for (int i = 1; i < jso.Length - 1; i++)
+    //        json += i;
 
 
-        for (int i = 0; i < json.Length; i++)
-        {
-            if (json[i] == '"')
-                break;
-            else if (json[i] != ':' && json[i] != ',')
-            {
-                if (kto)
-                    kei += i;
-                else
-                    znasenia += i;
-            }
-            else if (json[i] == ':' && json[i] != ',')
-                kto = true;
-            else if (json[i] != ':' && json[i] == ',')
-            {
-                form.AddField(kei, znasenia);
-                kto = false;
-                kei = "";
-                znasenia = "";
-            }
-            //form.AddField("Money", "1");
-        }
+    //    WWWForm form = new WWWForm();
 
-        UnityWebRequest www = UnityWebRequest.Post(url, form);
-        yield return www.SendWebRequest();
-
-        if (www.result != UnityWebRequest.Result.Success)
-            Debug.Log(www.error);
-    }
+    //    string kei = "";
+    //    string znasenia = "";
+    //    bool kto = false;
 
 
+    //    for (int i = 0; i < json.Length; i++)
+    //    {
+    //        if (json[i] == '"')
+    //            break;
+    //        else if (json[i] != ':' && json[i] != ',')
+    //        {
+    //            if (kto)
+    //                kei += i;
+    //            else
+    //                znasenia += i;
+    //        }
+    //        else if (json[i] == ':' && json[i] != ',')
+    //            kto = true;
+    //        else if (json[i] != ':' && json[i] == ',')
+    //        {
+    //            form.AddField(kei, znasenia);
+    //            kto = false;
+    //            kei = "";
+    //            znasenia = "";
+    //        }
+    //        //form.AddField("Money", "1");
+    //    }
 
-    //////////////////
+    //    UnityWebRequest www = UnityWebRequest.Post(url, form);
+    //    yield return www.SendWebRequest();
+
+    //    if (www.result != UnityWebRequest.Result.Success)
+    //        Debug.Log(www.error);
+    //}
+
+    // работа с параметрами в post запросе
     public void PostRequest(int Money, float Distansion, int NFTVID,int Nonztia =0)
     { StartCoroutine(PostRequestB(Money, Distansion, NFTVID, Nonztia)); }
 
+
+    // post запрос
     private IEnumerator PostRequestB(int Money, float Distansion, int NFTVID, int Nonztia)
     {
         WWWForm form = new WWWForm();
@@ -79,17 +79,12 @@ public class MasterNet : MonoBehaviour
 
 
 
-
-
-
-
-
-
-    /////////////////////////////////
+    ///////////////////////////////// GET
     private bool zanusk = false;
     private bool zanros = true;
     private string date = "";
 
+    // обработка get запроса
     public string GetRequest()
     {
         if (!zanros && !zanusk)
@@ -107,8 +102,8 @@ public class MasterNet : MonoBehaviour
     }
 
 
-
-    IEnumerator GetRequestB()
+    // get запрос
+    private IEnumerator GetRequestB()
     {
         using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
         {

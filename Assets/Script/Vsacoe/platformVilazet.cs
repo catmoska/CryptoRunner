@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// платформа которая вилазет из пола или падает сверху
 public class platformVilazet : RunMonoBehaviour
 {
     private Transform Pleir;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 
+//не исползуетса
 public class ShareButton : MonoBehaviour
 {
 
