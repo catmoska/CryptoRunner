@@ -10,7 +10,6 @@ public class MoneuDellControlir : MonoBehaviour
     private static string neimtegNOisk = "Player";
     //private static string neimtegNOisk = "MoneuUi";
 
-
     private void Start()
     {
         if (nrig && Random.Range(0, 3) == 0)
