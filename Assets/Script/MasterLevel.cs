@@ -498,6 +498,7 @@ public class MasterLevel : MonoBehaviour
         }
         resetMusic();
         isPaus = !isPaus;
+
         if (Obusenia.activeInHierarchy)
             Obusenia.SetActive(false);
     }
