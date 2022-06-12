@@ -47,10 +47,10 @@ public class MasterLevel : MonoBehaviour
 
     [Header("PleirSposobnasti")]
     public PleirControlir PC;
-    
+
+    public TextMeshProUGUI[] EroorVivod;
     private bool Zagruzka = true;
     private bool PleiBloc = false;
-    public TextMeshProUGUI[] EroorVivod;
 
     public float TimeEroorStart;
     private float TimeEroor;
@@ -71,8 +71,8 @@ public class MasterLevel : MonoBehaviour
     public TextMeshProUGUI NFTMenuNeim;
     public TextMeshProUGUI NFTMenuEnergia;
     public TextMeshProUGUI timeObject;
-    private jsonGETPleir resultat;
     public int NFTVID = 0;
+    private jsonGETPleir resultat;
 
     private bool isEnd = false;
     [Header("kill")]
@@ -195,6 +195,9 @@ public class MasterLevel : MonoBehaviour
     // âîçðà÷àåò ñîñòîÿíéÿ åíåðãèé âèáðàíîãî nft 
     public bool GetNftEnerzi()
     {
+        UndeitMenu();
+        print(resultat.NFT[NFTVID].Energia);
+        print(NFTVID);
         return resultat.NFT[NFTVID].Energia==0;
     }
 
@@ -348,9 +351,11 @@ public class MasterLevel : MonoBehaviour
                     jsonGETNFT NFT = new jsonGETNFT();
                     NFT.Energia = Convert.ToInt32(jsonOtvet[0]);
                     NFT.EnergiaMax = Convert.ToInt32(jsonOtvet[1]);
-                    NFT.Nick = jsonOtvet[2];
+                    NFT.pk = Convert.ToInt32(jsonOtvet[2]);
                     NFT.time = Convert.ToInt32(jsonOtvet[3]); 
                     NFT.ÑlothesTip = Convert.ToInt32(jsonOtvet[4]);
+                    NFT.Nick = "Runner: #" + jsonOtvet[2];
+
 
                     resultat.NFT.Add(NFT);
                     jsonOtvet = new string[elementov];
@@ -363,11 +368,11 @@ public class MasterLevel : MonoBehaviour
         }
 
         // îáíîâëåíèÿ âñåõ ôóíêñèé ñ ïàðàìåòðàìè
-        UndeitMenu();
         Zagruzka = false;
 
         renderPleirStart();
         if (onlain) moneu.text = resultat.Money.ToString();
+        UndeitMenu();
     }
 
 
@@ -382,7 +387,6 @@ public class MasterLevel : MonoBehaviour
                 break;
             }
         }
-        renderPleir(resultat.NFT[NFTVID].ÑlothesTip);
     }
 
 
@@ -589,14 +593,14 @@ public class MasterLevel : MonoBehaviour
 
 
         float distans = ((int)((pleir.position.x - PC.StrtPosision.x) / 5));
-        //if (onlain && distans> resultat.Record)
-        if (onlain)
+        if (onlain && distans> resultat.Record)
             resultat.Record = distans;
         
 
         Debug.Log("end: distans: " + distans.ToString());
+        
         if (onlain)
-            MN.PostRequest(US.GetMoneu(), distans, NFTVID);
+            MN.PostRequest(US.GetMoneu(), distans, resultat.NFT[NFTVID].pk);
     }
 
 
@@ -606,7 +610,7 @@ public class MasterLevel : MonoBehaviour
         if (onlain)
         {
             resultat.NFT[NFTVID].Energia++;
-            MN.PostRequest(US.GetMoneu(), ((int)((pleir.position.x - PC.StrtPosision.x) / 5)), NFTVID, 1);
+            MN.PostRequest(US.GetMoneu(), ((int)((pleir.position.x - PC.StrtPosision.x) / 5)), resultat.NFT[NFTVID].pk, 1);
         }
     }
 
@@ -723,5 +727,6 @@ class jsonGETNFT
     public int EnergiaMax;
     public string Nick;
     public int time;
-    public int ÑlothesTip;
+    public int ÑlothesTip; 
+    public int pk;
 }

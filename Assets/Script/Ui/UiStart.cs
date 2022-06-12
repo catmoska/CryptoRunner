@@ -18,6 +18,7 @@ public class UiStart : MonoBehaviour
         if (ML == null)
             ML = GetComponent<MasterLevel>();
         if (autaStart) StartButton();
+        canvosOsnovnoi.SetActive(false);
     }
 
     public void StartButton()
